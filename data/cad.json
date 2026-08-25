@@ -1,0 +1,59 @@
+[
+  {
+    "id": "fess-rotor",
+    "title": "FESS Flywheel Rotor Assembly",
+    "category": "Energy Storage",
+    "software": "SolidWorks",
+    "poster": null,
+    "model": "/models/fess-rotor.glb",
+    "specs": {
+      "material": "AISI 4340 Steel",
+      "parts": "14",
+      "dimensions": "Ø180 × 240 mm",
+      "mass": "8.4 kg"
+    },
+    "description": "Magnetically-levitated vertical flywheel rotor for a Flywheel Energy Storage System. Designed for high-speed rotation with balanced mass distribution, integrated magnetic-bearing seats, and a composite-ready rim profile for kinetic energy storage.",
+    "hotspots": [
+      { "position": [0, 0.95, 0.35], "label": "Magnetic bearing seat" },
+      { "position": [1.05, -0.1, 0.2], "label": "Rotor rim" }
+    ]
+  },
+  {
+    "id": "conveyor-gearbox",
+    "title": "Conveyor Drive Gearbox",
+    "category": "Power Transmission",
+    "software": "Autodesk Fusion 360",
+    "poster": null,
+    "model": "/models/turet.glb",
+    "specs": {
+      "material": "Cast Iron / 20MnCr5",
+      "parts": "27",
+      "dimensions": "240 × 180 × 160 mm",
+      "mass": "12.6 kg"
+    },
+    "description": "Two-stage helical reduction gearbox driving an industrial IIoT conveyor line. Models the housing, shafts, bearings, and meshing gear train with a target reduction ratio tuned for continuous-duty belt throughput.",
+    "hotspots": [
+      { "position": [0, 0.7, 0.7], "label": "Input shaft" },
+      { "position": [-0.9, -0.3, 0.2], "label": "Output flange" }
+    ]
+  },
+  {
+    "id": "pump-impeller",
+    "title": "Centrifugal Pump Impeller",
+    "category": "Fluid Machinery",
+    "software": "SolidWorks",
+    "poster": null,
+    "model": "/models/vtp.glb",
+    "specs": {
+      "material": "316 Stainless Steel",
+      "parts": "1",
+      "dimensions": "Ø160 × 52 mm",
+      "mass": "1.9 kg"
+    },
+    "description": "Closed-type centrifugal impeller with backward-curved vanes, modelled for a mid-head process pump. Vane geometry is profiled for smooth flow transition and reduced cavitation risk at the design operating point.",
+    "hotspots": [
+      { "position": [0, 0.4, 0.9], "label": "Vane leading edge" },
+      { "position": [0, -0.2, 0], "label": "Eye / inlet bore" }
+    ]
+  }
+]

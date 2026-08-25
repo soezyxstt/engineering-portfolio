@@ -1,82 +1,123 @@
+import type { Metadata } from "next";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
-import { MoveLeft, MoveUpRight } from "lucide-react";
-import projectsData from "@/data/projects.json";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
+import { ArchitectureDiagram } from "@/components/projects/ArchitectureDiagram";
+import { getProject, projects } from "@/data/portfolio";
 
-export async function generateStaticParams() {
-  return projectsData.map((project) => ({
-    slug: project.id,
-  }));
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return projects.map((project) => ({ slug: project.slug }));
+}
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProject(slug);
+  if (!project) return {};
+  return {
+    title: `${project.title} — Engineering Case Study`,
+    description: project.summary,
+    alternates: { canonical: `/work/${project.slug}` },
+    openGraph: {
+      title: `${project.title} — Engineering Case Study`,
+      description: project.summary,
+      images: project.image ? [project.image] : ["/me_photo.jpeg"],
+    },
+  };
 }
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projectsData.find((p) => p.id === slug);
-
-  if (!project) return notFound();
+  const project = getProject(slug);
+  if (!project) notFound();
+  const currentIndex = projects.findIndex((entry) => entry.slug === project.slug);
+  const nextProject = projects[(currentIndex + 1) % projects.length];
 
   return (
-    <article className="w-full max-w-7xl mx-auto px-6 py-32 flex flex-col gap-16 min-h-screen">
-      <div className="flex flex-col gap-8 transition-all duration-1000 starting:opacity-0 starting:-translate-y-8">
-        <Link
-          href="/#work"
-          className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider opacity-60 hover:opacity-100 hover:text-accent transition-opacity w-fit"
-        >
-          <MoveLeft className="w-4 h-4" />
-          Back to Work
-        </Link>
-        <h1 
-          className="text-5xl md:text-7xl font-bold tracking-tight"
-          style={{ viewTransitionName: `project-title-${project.id}` }}
-        >
-          {project.title}
-        </h1>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs uppercase tracking-widest font-bold opacity-50">Category</span>
-            <span className="font-medium">{project.category}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs uppercase tracking-widest font-bold opacity-50">Tech Stack</span>
-            <div className="flex gap-2">
-              {project.stack.map((t) => (
-                <span key={t} className="font-medium text-sm border border-foreground/10 px-2 rounded-sm py-0.5">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="ml-auto">
-             <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group border border-foreground/20 px-4 py-2 rounded-full hover:border-foreground transition-colors">
-                <span className="text-sm font-bold">Visit Live</span>
-                <MoveUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-             </a>
-          </div>
+    <article className="case-study" style={{ "--project-accent": project.accent } as React.CSSProperties}>
+      <header className="case-hero">
+        <Link href="/work" className="back-link"><ArrowLeft size={15} /> All work</Link>
+        <p className="kicker"><span>{String(currentIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>{project.eyebrow}</p>
+        <h1>{project.title}</h1>
+        <p className="case-summary">{project.summary}</p>
+        <div className="case-meta-grid">
+          <div><span>Role</span><strong>{project.role}</strong></div>
+          <div><span>Period</span><strong>{project.year}</strong></div>
+          <div><span>Status</span><strong>{project.status}</strong></div>
+          <div><span>Evidence</span><strong>{project.evidence}</strong></div>
         </div>
+        <div className="case-actions">
+          {project.liveUrl ? <a className="button button-primary" href={project.liveUrl} target="_blank" rel="noreferrer">Visit live project <ArrowUpRight size={16} /></a> : null}
+          {project.repoUrl ? <a className="button button-secondary" href={project.repoUrl} target="_blank" rel="noreferrer">View repository <ArrowUpRight size={16} /></a> : null}
+        </div>
+      </header>
+
+      <div className="case-visual">
+        {project.image ? (
+          <Image src={project.image} alt={`Interface view of ${project.title}`} fill priority sizes="100vw" className="case-image" />
+        ) : (
+          <div className="case-schematic" aria-label="SCARA system signal path">
+            {project.architecture.map((layer, index) => (
+              <div key={layer.label}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{layer.label}</strong>
+                <small>{layer.detail}</small>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="w-full aspect-[16/10] relative bg-foreground/5 overflow-hidden transition-all duration-1000 delay-100 starting:opacity-0 starting:translate-y-12">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover"
-          style={{ viewTransitionName: `project-img-${project.id}` }}
-          priority
-        />
-      </div>
+      <section className="case-section case-narrative">
+        <div><p className="kicker"><span>01</span>Context</p><h2>The engineering problem</h2></div>
+        <div className="narrative-columns">
+          <div><span>Challenge</span><p>{project.challenge}</p></div>
+          <div><span>Response</span><p>{project.response}</p></div>
+          <div><span>Outcome</span><p>{project.outcome}</p></div>
+        </div>
+      </section>
 
-      <div className="max-w-3xl border-t border-foreground/10 pt-16 transition-all duration-1000 delay-300 starting:opacity-0 starting:translate-y-8">
-        <h2 className="text-2xl font-bold mb-6">Overview</h2>
-        <p className="text-lg leading-relaxed text-foreground/80">
-          {project.description}
-        </p>
-      </div>
+      <section className="case-section">
+        <div className="case-section-heading">
+          <p className="kicker"><span>02</span>System architecture</p>
+          <h2>How the layers connect</h2>
+          <p>The diagram is paired with a text alternative and remains readable without animation or WebGL.</p>
+        </div>
+        <ArchitectureDiagram project={project} />
+      </section>
+
+      <section className="case-section decision-section">
+        <div className="case-section-heading">
+          <p className="kicker"><span>03</span>Engineering decisions</p>
+          <h2>Choices that shaped the result</h2>
+        </div>
+        <div className="decision-list">
+          {project.decisions.map((decision, index) => (
+            <article key={decision.title}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div><h3>{decision.title}</h3><p>{decision.detail}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="case-section case-proof">
+        <div>
+          <p className="kicker"><span>04</span>Technical footprint</p>
+          <h2>Stack in context</h2>
+        </div>
+        <div>
+          <ul className="stack-list">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>
+          <ul className="highlight-list">{project.highlights.map((item) => <li key={item}><CheckCircle2 size={16} />{item}</li>)}</ul>
+        </div>
+      </section>
+
+      <Link href={`/work/${nextProject.slug}`} className="next-project">
+        <span>Next case study</span>
+        <strong>{nextProject.title}</strong>
+        <ArrowRight size={24} />
+      </Link>
     </article>
   );
 }

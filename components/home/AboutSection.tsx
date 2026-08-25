@@ -98,8 +98,18 @@ export function AboutSection() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-4 transition-all duration-1000 starting:opacity-0 starting:translate-y-8">
           <div className="sticky top-24 space-y-8 pr-0 md:pr-8">
-            <h2 className="font-display font-extrabold text-6xl md:text-7xl leading-none">About</h2>
-            <div className="relative aspect-[4/5] border-y border-border bg-surface/20 overflow-hidden">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <span className="coord-readout text-accent">/04 · PROFILE</span>
+                <span className="dim-line flex-1" />
+              </div>
+              <h2 className="font-display font-extrabold text-6xl md:text-7xl leading-none">About</h2>
+            </div>
+            <div className="relative aspect-[4/5] border border-border bg-surface/20 overflow-hidden">
+              <span className="corner corner-tl z-20" />
+              <span className="corner corner-tr z-20" />
+              <span className="corner corner-bl z-20" />
+              <span className="corner corner-br z-20" />
               <Image
                 src="/me_photo.jpeg"
                 alt="Portrait of Adi Haditya Nursyam"

@@ -51,18 +51,19 @@ export function HeroMotion({ content }: HeroMotionProps) {
   const marqueeTags = useMemo(
     () => [
       "Mechanical Engineering",
+      "CAD Design",
       "Web Architecture",
-      "UI Design",
-      "IoT",
-      "Student Organizations",
-      "Bandung",
+      "Mechatronics",
+      "IoT & Digital Twins",
+      "SolidWorks",
+      "Maintenance Systems",
     ],
     [],
   );
 
   return (
     <div className="relative">
-      <div className="grain-overlay" />
+      <div className="tech-overlay" />
 
       <div
         className="fade-up flex justify-between items-center mb-5 md:mb-8 overflow-hidden"
@@ -78,7 +79,7 @@ export function HeroMotion({ content }: HeroMotionProps) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-70" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
           </span>
-          <span className="font-mono-ui text-[10px] md:text-xs font-medium tracking-[0.16em] md:tracking-widest uppercase text-[color:var(--muted)] group-hover:text-accent2 transition-colors">
+          <span className="font-mono-ui text-[10px] md:text-xs font-medium tracking-[0.16em] md:tracking-widest uppercase text-[color:var(--muted)] group-hover:text-accent transition-colors">
             {content.statusText}
           </span>
         </motion.div>
@@ -87,14 +88,14 @@ export function HeroMotion({ content }: HeroMotionProps) {
           initial={shouldAnimate ? { opacity: 0, x: 20 } : false}
           animate={shouldAnimate ? { opacity: 1, x: 0 } : undefined}
           transition={{ duration: 0.8, ease: "circOut" }}
-          className="hidden md:block text-[10px] font-mono-ui font-medium tracking-[0.3em] uppercase text-[color:var(--muted)]"
+          className="hidden md:block coord-readout"
         >
           {content.badgeText}
         </motion.div>
       </div>
 
       <motion.div
-        className="relative z-10 fade-up max-w-full overflow-hidden"
+        className="relative z-10 fade-up max-w-full"
         style={{ animationDelay: "200ms" }}
         animate={
           shouldAnimate && !isMobile
@@ -103,17 +104,30 @@ export function HeroMotion({ content }: HeroMotionProps) {
         }
         transition={{ type: "spring", stiffness: 70, damping: 18, mass: 0.5 }}
       >
-        <motion.h1
-          initial={shouldAnimate ? { y: 100, opacity: 0 } : false}
-          animate={shouldAnimate ? { y: 0, opacity: 1 } : undefined}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display font-extrabold text-[clamp(2.35rem,14vw,4.8rem)] sm:text-[clamp(2.8rem,15vw,6.1rem)] md:text-[clamp(3.5rem,10vw,12rem)] leading-[0.93] mb-4 md:mb-6 wrap-break-word"
-        >
-          {content.firstName} <br />
-          <span className="block text-transparent [-webkit-text-stroke:1.5px_var(--text)] md:[-webkit-text-stroke:2px_var(--text)] whitespace-normal">
-            {content.lastName}
-          </span>
-        </motion.h1>
+        {/* Dimension line + label above the name */}
+        <div className="flex items-center gap-3 mb-3 md:mb-5">
+          <span className="coord-readout text-accent">[ NAME ]</span>
+          <span className="dim-line flex-1 max-w-[160px]" />
+          <span className="coord-readout hidden sm:inline">ref. AHN-2026</span>
+        </div>
+
+        <div className="relative px-1 py-1">
+          <span className="corner corner-tl" />
+          <span className="corner corner-tr" />
+          <span className="corner corner-bl" />
+          <span className="corner corner-br" />
+          <motion.h1
+            initial={shouldAnimate ? { y: 100, opacity: 0 } : false}
+            animate={shouldAnimate ? { y: 0, opacity: 1 } : undefined}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display font-extrabold text-[clamp(2.35rem,14vw,4.8rem)] sm:text-[clamp(2.8rem,15vw,6.1rem)] md:text-[clamp(3.5rem,10vw,12rem)] leading-[0.93] wrap-break-word"
+          >
+            {content.firstName} <br />
+            <span className="block text-transparent [-webkit-text-stroke:1.5px_var(--accent)] md:[-webkit-text-stroke:2px_var(--accent)] whitespace-normal">
+              {content.lastName}
+            </span>
+          </motion.h1>
+        </div>
       </motion.div>
 
       <div
@@ -127,9 +141,6 @@ export function HeroMotion({ content }: HeroMotionProps) {
           className="max-w-full md:max-w-[44rem]"
         >
           <p className="max-w-[19rem] sm:max-w-full text-[clamp(1rem,1.8vw,1.25rem)] text-[color:var(--text)] leading-[1.65]">
-            <span className="inline-flex items-center gap-2 mr-2 mb-2 sm:mb-0 px-[14px] py-1 rounded-full border border-accent text-accent font-mono-ui text-[10px] uppercase tracking-[0.15em] glow-pill bg-card">
-              pure generalist
-            </span>
             <span className="hero-cursor text-[color:var(--muted)]">
               {content.introPrefix} {content.introSuffix}
             </span>
@@ -145,7 +156,7 @@ export function HeroMotion({ content }: HeroMotionProps) {
           <div className="text-[11px] font-mono-ui font-medium tracking-[0.12em] uppercase text-accent">
             {content.locationLabel}
           </div>
-          <div className="text-[10px] font-mono-ui font-medium text-[color:var(--muted)] uppercase tracking-[0.08em]">
+          <div className="coord-readout">
             {content.timezoneLabel} {localTime ? `· ${localTime}` : ""}
           </div>
         </motion.div>
@@ -161,19 +172,20 @@ export function HeroMotion({ content }: HeroMotionProps) {
               key={`${tag}-${index}`}
               className="font-mono-ui text-[11px] tracking-[0.14em] uppercase text-[color:var(--muted)]"
             >
-              {tag} {index % 2 === 0 ? "·" : ""}
+              <span className="text-accent/70 mr-2">+</span>
+              {tag}
             </span>
           ))}
         </div>
       </div>
 
       <a
-        href="#work"
-        className="fade-up cursor-hit inline-flex items-center gap-2 mt-6 text-[10px] font-mono-ui uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-accent2 transition-colors"
+        href="#cad"
+        className="fade-up cursor-hit inline-flex items-center gap-2 mt-6 text-[10px] font-mono-ui uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-accent transition-colors"
         style={{ animationDelay: "500ms" }}
       >
-        Scroll to work
-        <span className="inline-block animate-bounce text-accent2">↓</span>
+        Scroll to CAD
+        <span className="inline-block animate-bounce text-accent">↓</span>
       </a>
     </div>
   );

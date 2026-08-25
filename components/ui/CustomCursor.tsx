@@ -38,6 +38,8 @@ export function CustomCursor() {
     };
   }, []);
 
+  const size = isHovering ? 46 : 26;
+
   return (
     <div
       aria-hidden
@@ -48,17 +50,31 @@ export function CustomCursor() {
         transition: "opacity 160ms ease-out",
       }}
     >
-      <span
-        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent bg-accent"
+      {/* Technical crosshair reticle */}
+      <div
+        className="absolute -translate-x-1/2 -translate-y-1/2"
         style={{
-          width: isHovering ? 32 : 8,
-          height: isHovering ? 32 : 8,
-          borderWidth: isHovering ? 1.5 : 0,
-          backgroundColor: isHovering ? "transparent" : "var(--accent)",
-          opacity: isHovering ? 0.9 : 1,
-          transition: "all 180ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+          width: size,
+          height: size,
+          transition: "width 200ms cubic-bezier(0.2,0.8,0.2,1), height 200ms cubic-bezier(0.2,0.8,0.2,1)",
         }}
-      />
+      >
+        {/* center dot */}
+        <span
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent"
+          style={{ width: 3, height: 3 }}
+        />
+        {/* crosshair arms */}
+        <span className="absolute left-1/2 top-0 -translate-x-1/2 h-[6px] w-px bg-accent/70" />
+        <span className="absolute left-1/2 bottom-0 -translate-x-1/2 h-[6px] w-px bg-accent/70" />
+        <span className="absolute top-1/2 left-0 -translate-y-1/2 w-[6px] h-px bg-accent/70" />
+        <span className="absolute top-1/2 right-0 -translate-y-1/2 w-[6px] h-px bg-accent/70" />
+        {/* corner ticks */}
+        <span className="absolute top-0 left-0 w-2 h-2 border-l border-t border-accent/60" />
+        <span className="absolute top-0 right-0 w-2 h-2 border-r border-t border-accent/60" />
+        <span className="absolute bottom-0 left-0 w-2 h-2 border-l border-b border-accent/60" />
+        <span className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-accent/60" />
+      </div>
     </div>
   );
 }
