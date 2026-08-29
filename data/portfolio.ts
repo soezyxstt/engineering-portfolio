@@ -167,36 +167,49 @@ export const projects: Project[] = [
     evidence: "Public repository, README, package architecture, migrations, tests, and deployment",
   },
   {
-    slug: "fess-digital-twin",
-    title: "FESS Monitoring & Digital Twin",
-    eyebrow: "Supporting / Mechatronics HMI",
-    year: "2025",
-    role: "HMI & visualization engineer",
-    status: "Engineering interface prototype",
+    slug: "me-bot",
+    title: "Me-Bot Personal Assistant",
+    eyebrow: "Supporting / AI & Local-First Product",
+    year: "2026",
+    role: "Product owner & full-stack engineer",
+    status: "Active personal product",
     summary:
-      "A monitoring interface for a flywheel energy-storage concept, combining MQTT telemetry, time-series views, and a Three.js digital twin.",
+      "A local-first brain-dump and personal knowledge workspace designed for instant capture, structured recall, and lightweight personal automation.",
     challenge:
-      "Give operators one legible view of machine state, vibration-oriented signals, and the physical assembly.",
+      "Make unstructured thoughts, tasks, reminders, notes, media, and sensitive information quick to capture without forcing the user through slow network-first workflows.",
     response:
-      "Combined typed web components, MQTT messaging, charting, a relational data layer, and React Three Fiber visualization.",
+      "Combined IndexedDB-first hydration, background synchronization, Cloudflare D1/R2/Vectorize, Gemini triage, semantic memory, Google integrations, encrypted vault workflows, and a separate agent mode.",
     outcome:
-      "A deployed technical HMI and public codebase that connect mechatronic context with modern web visualization patterns.",
-    disciplines: ["Mechanical", "Embedded", "Software"],
-    stack: ["Next.js", "MQTT", "Three.js", "Recharts", "Drizzle"],
-    highlights: ["MQTT telemetry", "3D assembly", "Signal views"],
+      "A deployed personal assistant that connects local-first interaction design with AI-assisted organization and cloud-backed synchronization while keeping the source repository private.",
+    disciplines: ["Software", "Platform", "Product"],
+    stack: ["Next.js", "TypeScript", "IndexedDB", "Cloudflare D1", "R2", "Vectorize", "Gemini"],
+    highlights: ["Local-first capture", "AI triage", "Semantic memory"],
     architecture: [
-      { label: "Machine", detail: "Flywheel assembly and instrumentation context." },
-      { label: "Messaging", detail: "MQTT carries telemetry into the browser experience." },
-      { label: "Interface", detail: "Charts and a 3D view provide complementary readings of system state." },
+      { label: "Local experience", detail: "IndexedDB provides immediate reads, offline capture, and a client-side synchronization queue." },
+      { label: "Application layer", detail: "Next.js APIs handle identity, entries, settings, AI workflows, and Google integrations." },
+      { label: "Cloud data", detail: "D1 stores structured data, R2 stores attachments, and Vectorize supports semantic memory." },
+      { label: "AI", detail: "Gemini performs structured triage, clarification, memory-aware routing, and agent assistance." },
     ],
     decisions: [
-      { title: "Use 3D only where it explains", detail: "The model is tied to the monitored machine rather than used as decorative WebGL." },
+      {
+        title: "Prioritize instant local interaction",
+        detail:
+          "The main workspace hydrates from IndexedDB before waiting for server round trips, keeping brain-dump capture responsive even with poor connectivity.",
+      },
+      {
+        title: "Use AI as structured triage",
+        detail:
+          "Classification includes confidence, clarification, temporal checks, and memory context rather than silently rewriting or discarding the original note.",
+      },
+      {
+        title: "Keep personal implementation private",
+        detail:
+          "The live product and engineering architecture can be demonstrated without publishing the source of a system designed around personal data and integrations.",
+      },
     ],
-    image: "/work/fess.png",
-    liveUrl: "https://fess-hmi.vercel.app",
-    repoUrl: "https://github.com/soezyxstt/fess-hmi",
+    liveUrl: "https://mebot.adihnursyam.com",
     accent: "#6d4ca5",
-    evidence: "Public repository, dependencies, commit history, and deployment",
+    evidence: "Deployed application, private source repository, and documented engineering architecture",
   },
   {
     slug: "iiot-conveyor",
@@ -306,6 +319,14 @@ export const archiveEntries = [
     href: `/work/${project.slug}`,
   })),
   {
+    slug: "fess-digital-twin",
+    title: "FESS Monitoring & Digital Twin",
+    year: "2025",
+    disciplines: ["Mechanical", "Embedded", "Software"] as Discipline[],
+    summary: "A flywheel energy-storage monitoring HMI with MQTT telemetry, vibration-oriented views, and a 3D digital twin.",
+    href: "https://github.com/soezyxstt/fess-hmi",
+  },
+  {
     slug: "gumelar",
     title: "Gumelar Collaboration Hub",
     year: "2026",
@@ -343,7 +364,7 @@ export const capabilityGroups = [
   {
     label: "Physical system",
     capabilities: ["Mechanical Design", "CAD", "Actuation", "Machine Constraints"],
-    projects: ["Two-DOF SCARA Robot", "FESS Digital Twin"],
+    projects: ["Two-DOF SCARA Robot"],
   },
   {
     label: "Behavior",
@@ -353,7 +374,7 @@ export const capabilityGroups = [
   {
     label: "Digital product",
     capabilities: ["Web Architecture", "Data Models", "Interfaces", "Infrastructure"],
-    projects: ["Zyx Academy", "HMM ITB Platform", "IAM ITB"],
+    projects: ["Zyx Academy", "HMM ITB Platform", "Me-Bot Personal Assistant", "IAM ITB"],
   },
   {
     label: "Delivery",
@@ -365,4 +386,3 @@ export const capabilityGroups = [
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);
 }
-
