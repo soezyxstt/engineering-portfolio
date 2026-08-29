@@ -6,7 +6,7 @@
       {
         "role": "Chairman (Pupuhu)",
         "period": "Feb 2026 - May 2026",
-        "glimpse": "Orchestrated a collaborative forum for 11+ regional student organizations, managing social services, literacy programs, and community talkshows."
+        "glimpse": "Led a collaborative forum for 11+ regional student organizations and coordinated community, literacy, and event programs."
       }
     ]
   },
@@ -17,7 +17,7 @@
       {
         "role": "Primary Energy and Ash Maintenance Intern",
         "period": "Jun 2025 - Aug 2025",
-        "glimpse": "Performed mechanical maintenance on coal-handling assets and conducted critical strength analysis on belt conveyor components."
+        "glimpse": "Worked on coal-handling maintenance and engineering analysis for belt-conveyor components in a power-plant environment."
       }
     ]
   },
@@ -27,18 +27,18 @@
     "positions": [
       {
         "role": "Head of Information and Technology Development Sub Bureau",
-        "period": "Aug 2025 - Present",
-        "glimpse": "Leading digital transformation and optimizing information flow across organizational stakeholders."
+        "period": "Aug 2025 - May 2026",
+        "glimpse": "Led digital transformation and technical delivery for member, learning, information, and administrative systems."
       },
       {
         "role": "Web Development Engineer",
         "period": "Aug 2024 - Jul 2025",
-        "glimpse": "Served as a technical bridge for digital platforms and front-end engineering."
+        "glimpse": "Built and maintained web applications supporting organizational information and member workflows."
       },
       {
         "role": "Member",
         "period": "Oct 2023 - Jul 2024",
-        "glimpse": "Active engagement in internal departments and organizational operations."
+        "glimpse": "Contributed to internal organizational programs before moving into web-development leadership."
       }
     ]
   },
@@ -49,17 +49,17 @@
       {
         "role": "President",
         "period": "Jan 2025 - Aug 2025",
-        "glimpse": "Revitalized organization after 5 years, focusing on regional student empowerment."
+        "glimpse": "Revitalized the organization after five years of dormancy and rebuilt its student and stakeholder network."
       },
       {
         "role": "Head of Academic Division",
         "period": "Apr 2024 - Jan 2025",
-        "glimpse": "Orchestrated academic support and peer mentoring for first-year engineering students."
+        "glimpse": "Led academic support and peer-mentoring programs for first-year students."
       },
       {
         "role": "Head of Event Organizer",
         "period": "Dec 2023 - Mar 2024",
-        "glimpse": "Led educational roadshows to promote higher education aspirations across Garut."
+        "glimpse": "Led educational outreach and school roadshows across Garut."
       }
     ]
   },
@@ -70,17 +70,17 @@
       {
         "role": "Mechanical Engineer",
         "period": "Jun 2022 - Jul 2025",
-        "glimpse": "Specialized in CAD modeling and structural design using SOLIDWORKS."
+        "glimpse": "Developed mechanical and CAD solutions for student robotics projects, working across design and system integration."
       },
       {
         "role": "Chief Executive of Sekolah URO",
         "period": "Aug 2024 - Feb 2025",
-        "glimpse": "Managed organizational training and leadership development for new members."
+        "glimpse": "Led a technical training program for new robotics members."
       },
       {
         "role": "Human Resources Manager",
         "period": "Oct 2023 - May 2024",
-        "glimpse": "Coordinated recruitment and internal member development programs."
+        "glimpse": "Managed recruitment and member-development programs."
       }
     ]
   },
@@ -91,12 +91,12 @@
       {
         "role": "Statics and Structural Analysis Academic Assistant",
         "period": "Mar 2024 - Jun 2024",
-        "glimpse": "Facilitated undergraduate learning in structural mechanics and equilibrium principles."
+        "glimpse": "Supported undergraduate instruction, problem solving, course materials, and assessment in structural mechanics."
       },
       {
         "role": "Computational Thinking Practicum Assistant",
         "period": "Jul 2023 - Nov 2023",
-        "glimpse": "Guided students in algorithm logic and technical problem-solving."
+        "glimpse": "Guided students through algorithms, programming logic, and computational problem solving."
       }
     ]
   },
@@ -105,14 +105,14 @@
     "location": "Garut, Jawa Barat",
     "positions": [
       {
-        "role": "Research And Development Officer",
+        "role": "Research and Development Officer",
         "period": "Nov 2023 - Nov 2025",
-        "glimpse": "Conducted community-focused R&D and team-based regional development."
+        "glimpse": "Supported research, program development, and organizational initiatives for a regional youth organization."
       },
       {
         "role": "Event Coordinator",
         "period": "Aug 2024",
-        "glimpse": "Coordinated logistics and leadership for major regional events."
+        "glimpse": "Coordinated a regional public event and its operating team."
       }
     ]
   },
@@ -122,8 +122,8 @@
     "positions": [
       {
         "role": "Academic Physics & Math Tutor",
-        "period": "Apr 2024 - Present",
-        "glimpse": "Providing technical instruction in physics and mathematics for engineering students."
+        "period": "Apr 2024 - Dec 2025",
+        "glimpse": "Taught physics and mathematics with an emphasis on engineering problem solving."
       }
     ]
   },
@@ -134,7 +134,7 @@
       {
         "role": "Head of Information Technology Department",
         "period": "Nov 2023 - Apr 2024",
-        "glimpse": "Developed web infrastructure and media platforms for university-wide elections."
+        "glimpse": "Led technical delivery for the university-wide student-election web platform."
       }
     ]
   },
@@ -145,7 +145,7 @@
       {
         "role": "Frontend Web Developer Staff",
         "period": "Apr 2023 - Aug 2023",
-        "glimpse": "Engineered digital platforms to support student orientation activities."
+        "glimpse": "Built frontend experiences supporting ITB student-orientation activities."
       }
     ]
   }
