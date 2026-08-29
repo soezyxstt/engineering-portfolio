@@ -1,20 +1,24 @@
 # Adi Haditya Nursyam — Engineering Portfolio
 
-A recruitment-focused portfolio for a multidisciplinary engineer working across robotics, control, embedded systems, software platforms, product development, and technical leadership.
+[![CI](https://github.com/soezyxstt/port/actions/workflows/ci.yml/badge.svg)](https://github.com/soezyxstt/port/actions/workflows/ci.yml)
+
+Recruitment-focused engineering portfolio covering software products, AI systems, robotics, control, embedded systems, and technical leadership.
+
+**Live:** [adihnursyam.me](https://adihnursyam.me)
 
 ## Stack
 
 - Next.js 16 App Router
 - React 19 and TypeScript
-- Tailwind CSS 4 plus a custom editorial design system
+- Tailwind CSS 4 with a custom editorial design system
 - Framer Motion for selected interactions
-- React Three Fiber for the existing CAD viewer
+- React Three Fiber for CAD and technical visualization
 
 ## Local development
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Open `http://localhost:3000`.
@@ -22,17 +26,17 @@ Open `http://localhost:3000`.
 ## Validation
 
 ```bash
-npm run lint
-npm run build
+bun run lint
+bun run build
 ```
 
-The production build performs TypeScript validation and statically generates the selected project case studies.
+GitHub Actions runs the same lint and production-build checks on pushes and pull requests to `main`.
 
 ## Content model
 
-Selected projects, architecture layers, evidence boundaries, disciplines, and case-study decisions live in `data/portfolio.ts`. Adding an entry there automatically feeds the work index, dynamic case-study route, and sitemap.
+Selected projects, architecture layers, evidence boundaries, disciplines, and case-study decisions live in `data/portfolio.ts`. Adding an entry there feeds the work index, dynamic case-study route, and sitemap.
 
-Supporting profile and role history remains in `data/about.json` and `data/experience.json`.
+Supporting profile and role history lives in `data/about.json` and `data/experience.json`.
 
 ## Main routes
 
@@ -46,13 +50,11 @@ Supporting profile and role history remains in `data/about.json` and `data/exper
 
 ## Deployment
 
-Set `NEXT_PUBLIC_SITE_URL` to the canonical public origin before deploying. It is used by metadata, the generated sitemap, and robots configuration.
-
-Deploy with any Next.js-compatible host using:
+Copy `.env.example` for local configuration and set `NEXT_PUBLIC_SITE_URL` to the canonical public origin before deployment. It is used by metadata, sitemap, and robots configuration.
 
 ```bash
-npm run build
-npm start
+bun run build
+bun run start
 ```
 
 ## Documentation
