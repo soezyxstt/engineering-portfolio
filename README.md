@@ -4,7 +4,7 @@
 
 Recruitment-focused engineering portfolio covering software products, AI systems, robotics, control, embedded systems, and technical leadership.
 
-**Live:** [adihnursyam.me](https://adihnursyam.me)
+**Live:** [adihnursyam.com](https://adihnursyam.com)
 
 ## Stack
 
