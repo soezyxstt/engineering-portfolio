@@ -70,18 +70,36 @@ export function ProjectGrid() {
               <div
                 className={`relative w-full overflow-hidden border border-border group-hover:border-accent/40 transition-colors duration-500 ${index === 0 ? "aspect-[16/7]" : "aspect-[16/10]"}`}
               >
-                {/* corner registration ticks */}
                 <span className="corner corner-tl z-20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="corner corner-tr z-20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="corner corner-bl z-20 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="corner corner-br z-20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:[filter:saturate(1)_brightness(1)]"
-                  style={{ filter: "saturate(0.35) brightness(0.85)", viewTransitionName: `project-img-${project.id}` }}
-                />
+
+                {project.image ? (
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:[filter:saturate(1)_brightness(1)]"
+                    style={{ filter: "saturate(0.35) brightness(0.85)", viewTransitionName: `project-img-${project.id}` }}
+                  />
+                ) : (
+                  <div
+                    className="absolute inset-0 flex items-end bg-[radial-gradient(circle_at_72%_22%,rgba(255,255,255,0.08),transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.03),transparent_55%)] p-6 md:p-8"
+                    style={{ viewTransitionName: `project-img-${project.id}` }}
+                    aria-label={`${project.title} project preview`}
+                  >
+                    <div className="max-w-[85%]">
+                      <div className="font-mono-ui text-[10px] uppercase tracking-[0.18em] text-accent mb-3">
+                        Architecture-led case study
+                      </div>
+                      <div className="font-display font-extrabold text-4xl md:text-6xl tracking-tight text-foreground/90">
+                        {project.title}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="absolute inset-0 bg-[rgba(10,12,16,0.86)] opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-6">
                   <div className="flex items-center justify-between">
                     <div className="font-mono-ui text-[11px] uppercase tracking-[0.1em] text-accent">
