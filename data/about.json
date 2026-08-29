@@ -1,12 +1,12 @@
 {
   "bio": [
-    "I am a Mechanical Engineering student at Institut Teknologi Bandung with a strong focus on integrating industrial maintenance systems with information technology.",
-    "My experience spans power-plant maintenance analysis at PLN Indonesia Power and digital transformation leadership in student organizations, where I build practical systems for real operational needs.",
-    "I work across engineering and software to deliver data-driven solutions using tools like Next.js, Python, and SQL, while managing multidisciplinary projects with clear execution."
+    "I am a software engineer with a Mechanical Engineering background from Institut Teknologi Bandung, focused on full-stack products, AI-enabled systems, and software that interfaces with physical systems.",
+    "I have built and led production-oriented platforms for education, student organizations, personal productivity, industrial interfaces, and robotics, working across product design, frontend, backend, data, cloud infrastructure, and embedded integration.",
+    "My engineering background gives me a systems perspective: I am comfortable moving from product requirements and data models to APIs, interfaces, deployment, telemetry, and hardware constraints."
   ],
   "education": {
     "institution": "Institut Teknologi Bandung",
     "major": "Mechanical Engineering",
-    "description": "Current GPA: 3.9/4.00. Focused on mechanical systems, maintenance reliability, and applied digital workflows for technical operations."
+    "description": "2022-2026. GPA: 3.9/4.00. Coursework and projects span mechanical systems, control, computation, robotics, and applied software engineering."
   }
 }
