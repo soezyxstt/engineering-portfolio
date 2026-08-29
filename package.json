@@ -1,6 +1,7 @@
 {
-  "name": "port",
+  "name": "adi-haditya-engineering-portfolio",
   "version": "0.1.0",
+  "description": "Recruitment-focused engineering portfolio spanning robotics, software systems, product work, and technical leadership",
   "private": true,
   "scripts": {
     "dev": "next dev",
