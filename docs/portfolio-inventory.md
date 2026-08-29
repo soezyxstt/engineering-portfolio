@@ -18,7 +18,7 @@ Projects were compared on technical depth, relevance to robotics or software rol
 ### Zyx Academy
 
 - Source: public product at `zyxacademy.com` and founder context supplied in the portfolio brief.
-- Evidence boundary: the product repository and private metrics were not publicly available during this audit.
+- Evidence boundary: the product repository and private metrics are intentionally not published.
 - Portfolio rationale: strongest evidence of founder-level product ownership and long-term connection between software, teaching, content operations, and service delivery.
 
 ### HMM ITB Platform
@@ -30,11 +30,12 @@ Projects were compared on technical depth, relevance to robotics or software rol
 
 ## Supporting projects
 
-### FESS Monitoring & Digital Twin
+### Me-Bot Personal Assistant
 
-- Source: `soezyxstt/fess-hmi`
-- Verified evidence: Next.js, MQTT, React Three Fiber, charting, Drizzle, deployed interface.
-- Positioning: mechatronic monitoring prototype; no unverified physical test metrics are claimed.
+- Source: private `soezyxstt/me-bot` repository plus the deployed application at `mebot.adihnursyam.com`.
+- Verified scope: Next.js, IndexedDB local-first storage, background synchronization, Cloudflare D1/R2/Vectorize, Gemini triage, semantic memory, Google integrations, encrypted vault workflows, and agent-mode interfaces.
+- Evidence boundary: implementation source remains private because the application is designed around personal data and integrations.
+- Positioning: stronger software-product showcase than a second HMI because it demonstrates local-first architecture, AI orchestration, cloud infrastructure, and product design.
 
 ### IIoT Conveyor Interface
 
@@ -56,12 +57,11 @@ Projects were compared on technical depth, relevance to robotics or software rol
 
 ## Archive-only projects
 
-Gumelar, Sentuh Undang, Mechanical Festival, and Pamoka remain discoverable in the archive but do not receive deep case studies because the available public evidence is currently thinner or the work is less differentiated for the target engineering roles.
+FESS Monitoring & Digital Twin, Gumelar, Sentuh Undang, Mechanical Festival, and Pamoka remain discoverable in the archive but do not receive primary portfolio emphasis. FESS remains useful engineering evidence, but Me-Bot provides a more differentiated software-product story alongside SCARA and the IIoT project.
 
 ## Claims intentionally removed or softened
 
 - No user counts, traffic figures, revenue, concurrency numbers, performance improvements, or team sizes are published without direct evidence.
-- Project technology is described only where it is visible in a public repository or supplied context.
-- Zyx architecture and private product metrics are not inferred.
+- Project technology is described only where it is visible in a repository, deployed product, or supplied project context.
+- Private product metrics are not inferred.
 - Organizational work is clearly identified as team work.
-
