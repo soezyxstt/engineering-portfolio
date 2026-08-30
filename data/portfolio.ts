@@ -25,6 +25,8 @@ export type Project = {
   architecture: { label: string; detail: string }[];
   decisions: { title: string; detail: string }[];
   image?: string;
+  gallery?: { src: string; alt: string; caption: string; wide?: boolean }[];
+  videos?: { src: string; title: string; caption: string; poster?: string }[];
   liveUrl?: string;
   repoUrl?: string;
   flagship?: boolean;
@@ -45,12 +47,12 @@ export const projects: Project[] = [
     challenge:
       "Make a two-joint physical system understandable and testable across mechanics, actuation, motion control, sensing, and experimental analysis.",
     response:
-      "Built a shared telemetry contract between ESP32 firmware and a Next.js HMI, then structured the controller so inertia, Coriolis, and gravity compensation could be evaluated independently.",
+      "Built a shared telemetry contract between ESP32 firmware and a Next.js HMI, then tested a tracking differentiator, a trapezoidal motion profile, and independently switchable inertia, Coriolis, and gravity compensation.",
     outcome:
-      "A working research platform with reproducible experiment exports, Web Serial operation, technical documentation, and selected datasets for five experiment families.",
+      "The tracking differentiator reduced mean absolute tracking error by 38.7%, while the trapezoidal profile reduced end-effector RMSE by 50.4%. The same experiments also exposed model mismatch: inertia compensation increased contour error, while gravity compensation cut final uphill error from 97.77 mm to 8.45 mm.",
     disciplines: ["Robotics", "Mechanical", "Embedded", "Control", "Software"],
     stack: ["ESP32", "C++", "Next.js", "TypeScript", "Python", "Web Serial"],
-    highlights: ["2 controlled joints", "921,600 baud telemetry", "5 experiment families"],
+    highlights: ["38.7% lower tracking error with TD", "50.4% lower RMSE with trapezoidal motion", "Five controlled experiment groups"],
     architecture: [
       { label: "Mechanism", detail: "Planar two-link SCARA hardware with DC and stepper actuation." },
       { label: "Firmware", detail: "PID, tracking differentiator, trapezoidal trajectory, and selectable feedforward terms." },
@@ -74,53 +76,172 @@ export const projects: Project[] = [
         detail:
           "Experiment records and export scripts live beside the operating software, making validation a first-class system layer.",
       },
+      {
+        title: "Report the result, not the expected story",
+        detail:
+          "Inertia compensation increased mean contour error by 95.7% under the tested model. Keeping that negative result visible made model mismatch an engineering finding instead of hiding it behind aggregate performance claims.",
+      },
+    ],
+    image: "/work/scara/monitor.png",
+    gallery: [
+      {
+        src: "/work/scara/hardware.jpg",
+        alt: "Physical two degree-of-freedom SCARA teaching robot",
+        caption: "Hardware / the physical two-link teaching platform used for the experiments",
+      },
+      {
+        src: "/work/scara/analysis.png",
+        alt: "SCARA phase portrait and end-effector analysis charts",
+        caption: "Analysis / phase portrait, Cartesian error, and velocity response",
+      },
+      {
+        src: "/work/scara/step-noise.png",
+        alt: "SCARA step response and filtered position analysis interface",
+        caption: "Step & noise / target response, jitter, and steady-state error",
+      },
+      {
+        src: "/work/scara/readme.png",
+        alt: "SCARA browser HMI technical user guide",
+        caption: "Documentation / operating guide embedded in the deployed HMI",
+      },
+    ],
+    videos: [
+      {
+        src: "/work/scara/run-demo.mp4",
+        title: "SCARA motion run",
+        caption: "Physical run / a concise motion demonstration of the assembled two-link platform",
+        poster: "/work/scara/hardware.jpg",
+      },
+      {
+        src: "/work/scara/controller-tuning.mp4",
+        title: "SCARA controller tuning",
+        caption: "Controller tuning / parameter adjustment and response review through the operating interface",
+        poster: "/work/scara/monitor.png",
+      },
     ],
     liveUrl: "https://tugasakhir.adihnursyam.com",
     repoUrl: "https://github.com/soezyxstt/scara-final-year-project",
     flagship: true,
     accent: "#3757d5",
-    evidence: "Public repository, firmware documentation, selected datasets, and deployed HMI",
+    evidence: "Signed thesis report, physical prototype, experiment datasets, public repository, and deployed HMI",
   },
   {
     slug: "zyx-academy",
     title: "Zyx Academy",
-    eyebrow: "Flagship / Founder Product",
+    eyebrow: "Flagship / AI Learning Platform",
     year: "2024—Now",
-    role: "Founder, product owner & software engineer",
-    status: "Active education initiative",
+    role: "Founder & CEO · Product and engineering lead",
+    status: "Active AI-enabled learning platform",
     summary:
-      "A hybrid tutoring initiative and digital learning product built to make demanding engineering foundations easier to navigate and practice.",
+      "An AI-enabled learning platform combining structured content, assessments, spaced repetition, progress tracking, and retrieval-backed tutoring.",
     challenge:
-      "Connect tutoring, structured learning material, and interactive practice in a product that supports learners beyond a single class session.",
+      "Turn fragmented learning content, practice, progress, and tutoring into one coherent product that can support learners between live sessions.",
     response:
-      "Developed the initiative as both an education service and a software product, with modular course journeys and interactive mathematics and science experiences.",
+      "Lead product architecture and full-stack development across learner experiences, relational and vector data, cloud infrastructure, AI workflows, and internal authoring systems.",
     outcome:
-      "A functioning public platform that demonstrates long-term product ownership across teaching, content operations, interface design, and software delivery.",
+      "A live platform and operating education initiative demonstrating long-term ownership across product, engineering, content operations, and delivery.",
     disciplines: ["Software", "Platform", "Product", "Leadership"],
-    stack: ["React", "Node.js", "Interactive math", "Product operations"],
-    highlights: ["Founder-led", "Hybrid tutoring", "Live product"],
+    stack: ["Next.js 16", "TypeScript", "Drizzle", "Turso", "Cloudflare R2", "Vectorize", "Gemini", "MCP"],
+    highlights: ["Founder & CEO", "Retrieval-backed tutoring", "Structured authoring pipeline"],
     architecture: [
-      { label: "Learner", detail: "A clear entry point into courses, practice, and tutor-led support." },
-      { label: "Learning product", detail: "Modular content and interactive science or mathematics experiences." },
-      { label: "Operations", detail: "Tutoring delivery, content decisions, and platform iteration inform one another." },
+      { label: "Learner", detail: "Structured content, assessment, spaced repetition, progress, and tutor support." },
+      { label: "Application", detail: "Full-stack product flows connect learning activity with operational workflows." },
+      { label: "Knowledge", detail: "Relational records and vector retrieval support grounded learning experiences." },
+      { label: "AI workflow", detail: "Retrieval-backed tutoring and internal authoring systems extend the product." },
+      { label: "Operations", detail: "Teaching, content decisions, and platform iteration continuously inform one another." },
     ],
     decisions: [
       {
-        title: "Build around a real service",
+        title: "Build around a real learning operation",
         detail:
           "The platform is shaped by the needs of an operating tutoring initiative rather than by a fictional product brief.",
       },
       {
-        title: "Keep public claims conservative",
+        title: "Ground AI in structured knowledge",
         detail:
-          "Private product metrics and infrastructure details are intentionally omitted until they can be published with evidence.",
+          "Retrieval and authoring workflows are designed around maintained learning content rather than an unbounded general-purpose chat experience.",
       },
     ],
-    image: "/work/zyx.png",
+    image: "/work/zyx/home.png",
+    gallery: [
+      {
+        src: "/work/zyx/architecture-public.png",
+        alt: "Public-safe Zyx Academy system architecture showing interfaces, product core, canonical knowledge, storage, retrieval, and AI delivery",
+        caption: "Architecture / public system view with operational identifiers and security-sensitive internals removed",
+        wide: true,
+      },
+      {
+        src: "/work/zyx/learning-loop.png",
+        alt: "Zyx Academy mastery map and personalized learning loop",
+        caption: "Learning loop / diagnosis, mastery mapping, and next-step guidance",
+      },
+      {
+        src: "/work/zyx/zyra.png",
+        alt: "Zyra retrieval-backed learning assistant section",
+        caption: "Zyra / answers grounded in maintained course material",
+      },
+    ],
     liveUrl: "https://zyxacademy.com",
+    repoUrl: "https://github.com/soezyxstt/zyx-academy-showcase",
     flagship: true,
     accent: "#a1642b",
-    evidence: "Founder context supplied for this portfolio and the public Zyx Academy product",
+    evidence: "Live product, sanitized captures, and a public engineering case-study repository",
+  },
+  {
+    slug: "mebot",
+    title: "MeBot",
+    eyebrow: "Flagship / Local-First AI Assistant",
+    year: "2026",
+    role: "Product architect & full-stack engineer",
+    status: "Active personal productivity product",
+    summary:
+      "A local-first personal assistant for capturing unstructured thoughts, turning them into actions, and managing the workspace through an agent interface.",
+    challenge:
+      "Make fast, messy capture useful without forcing people to organize every thought up front—or making private notes depend on a constant network connection.",
+    response:
+      "Designed an IndexedDB-first experience with an offline write queue, structured AI triage, semantic memory, a client-side vault, and an agent mode for changing workspace behavior through natural language.",
+    outcome:
+      "A deployed PWA that demonstrates privacy-conscious product boundaries, resilient local interaction, compound-input handling, and integrations with Google Calendar and Tasks.",
+    disciplines: ["Software", "Platform", "Product"],
+    stack: ["Next.js 16", "React 19", "TypeScript", "IndexedDB", "Cloudflare Workers", "D1", "R2", "Vectorize", "Gemini"],
+    highlights: ["Local-first capture", "Offline write queue", "Semantic memory & agent mode"],
+    architecture: [
+      { label: "Capture", detail: "A low-friction dump interface accepts unstructured and compound input." },
+      { label: "Local state", detail: "IndexedDB and an offline queue keep the primary interaction resilient." },
+      { label: "AI triage", detail: "Structured output turns raw input into notes, tasks, categories, and follow-up actions." },
+      { label: "Memory", detail: "Vector search and controlled context retrieval support continuity across sessions." },
+      { label: "Integrations", detail: "Cloud services connect reminders with Google Calendar and Tasks." },
+    ],
+    decisions: [
+      {
+        title: "Keep capture local-first",
+        detail:
+          "The interface writes locally before synchronization, so the most frequent action remains fast and available when connectivity is unreliable.",
+      },
+      {
+        title: "Separate dumping from agent control",
+        detail:
+          "Dump mode is optimized for capture; Agent mode is reserved for deliberate workspace changes such as categories, themes, reminders, and memory rules.",
+      },
+      {
+        title: "Publish the system, not private data",
+        detail:
+          "The public case study documents architecture and interaction patterns while excluding notes, database contents, credentials, vault data, and security-sensitive implementation detail.",
+      },
+    ],
+    image: "/work/mebot/dump-brain.png",
+    gallery: [
+      {
+        src: "/work/mebot/agent-mode.png",
+        alt: "MeBot agent workspace configuration interface",
+        caption: "Agent mode / natural-language control for workspace configuration",
+      },
+    ],
+    liveUrl: "https://mebot.adihnursyam.com",
+    repoUrl: "https://github.com/soezyxstt/me-bot-showcase",
+    flagship: true,
+    accent: "#895c3f",
+    evidence: "Live authenticated product, privacy-safe captures, and a sanitized public engineering case study",
   },
   {
     slug: "hmm-itb-platform",
@@ -167,49 +288,99 @@ export const projects: Project[] = [
     evidence: "Public repository, README, package architecture, migrations, tests, and deployment",
   },
   {
-    slug: "me-bot",
-    title: "Me-Bot Personal Assistant",
-    eyebrow: "Supporting / AI & Local-First Product",
-    year: "2026",
-    role: "Product owner & full-stack engineer",
-    status: "Active personal product",
+    slug: "pln-idler-reliability",
+    title: "BC-54 Idler Reliability Study",
+    eyebrow: "Supporting / Industrial Reliability",
+    year: "2025",
+    role: "Primary Energy and Ash Maintenance Intern",
+    status: "Field-informed internship study",
     summary:
-      "A local-first brain-dump and personal knowledge workspace designed for instant capture, structured recall, and lightweight personal automation.",
+      "A finite-element and failure-mechanism study of catastrophic carrying-idler shell damage in the BC-54 coal-handling conveyor at PLN Indonesia Power Banten 1 Suralaya Unit 8.",
     challenge:
-      "Make unstructured thoughts, tasks, reminders, notes, media, and sensitive information quick to capture without forcing the user through slow network-first workflows.",
+      "Field failures were severe enough to split an idler shell, yet maintenance was largely reactive. The study needed to determine whether the original design was structurally inadequate or whether another degradation mechanism explained the mismatch.",
     response:
-      "Combined IndexedDB-first hydration, background synchronization, Cloudflare D1/R2/Vectorize, Gemini triage, semantic memory, Google integrations, encrypted vault workflows, and a separate agent mode.",
+      "Measured the component in the field, translated the 800 TPH operating context into a 1,234.78 N equivalent load, built a simplified ASTM A36 shaft-and-shell model, and compared static and fatigue results with physical failure evidence.",
     outcome:
-      "A deployed personal assistant that connects local-first interaction design with AI-assisted organization and cloud-backed synchronization while keeping the source repository private.",
-    disciplines: ["Software", "Platform", "Product"],
-    stack: ["Next.js", "TypeScript", "IndexedDB", "Cloudflare D1", "R2", "Vectorize", "Gemini"],
-    highlights: ["Local-first capture", "AI triage", "Semantic memory"],
+      "The model returned 68.77 MPa maximum von Mises stress, a 1.7449 minimum static safety factor, and a pure-fatigue prediction beyond one million cycles. That discrepancy redirected the root-cause hypothesis toward abrasive wear, wall thinning, and subsequent fatigue fracture—and informed a proposed ultrasonic thickness-inspection program.",
+    disciplines: ["Mechanical"],
+    stack: ["Ansys Workbench", "Finite Element Analysis", "Failure Analysis", "Field Measurement", "Condition-Based Maintenance"],
+    highlights: ["68.77 MPa maximum stress", "1.7449 minimum safety factor", ">1M-cycle pure-fatigue prediction"],
     architecture: [
-      { label: "Local experience", detail: "IndexedDB provides immediate reads, offline capture, and a client-side synchronization queue." },
-      { label: "Application layer", detail: "Next.js APIs handle identity, entries, settings, AI workflows, and Google integrations." },
-      { label: "Cloud data", detail: "D1 stores structured data, R2 stores attachments, and Vectorize supports semantic memory." },
-      { label: "AI", detail: "Gemini performs structured triage, clarification, memory-aware routing, and agent assistance." },
+      { label: "Field evidence", detail: "Observed shell wear and catastrophic splitting on the BC-54 carrying idler." },
+      { label: "Load model", detail: "Converted conveyor capacity, belt mass, and idler spacing into a 1,234.78 N equivalent load." },
+      { label: "FEA", detail: "Evaluated static stress, safety factor, and fatigue life using a simplified ASTM A36 model." },
+      { label: "Reconciliation", detail: "Compared safe-model results with the failed physical component instead of stopping at the simulation output." },
+      { label: "Maintenance proposal", detail: "Proposed periodic ultrasonic wall-thickness inspection as a condition-based intervention." },
     ],
     decisions: [
       {
-        title: "Prioritize instant local interaction",
+        title: "Treat disagreement as evidence",
         detail:
-          "The main workspace hydrates from IndexedDB before waiting for server round trips, keeping brain-dump capture responsive even with poor connectivity.",
+          "A safe static model did not invalidate the field failure. It narrowed the investigation toward degradation modes excluded from the simulation, especially abrasive wear and wall thinning.",
       },
       {
-        title: "Use AI as structured triage",
+        title: "State the model boundary",
         detail:
-          "Classification includes confidence, clarification, temporal checks, and memory context rather than silently rewriting or discarding the original note.",
+          "Bearings, seals, abrasive wear, corrosion, impact loading, and possible misalignment were not represented. The portfolio therefore presents the maintenance thresholds as analytical proposals, not verified plant outcomes.",
       },
       {
-        title: "Keep personal implementation private",
+        title: "Turn analysis into an actionable inspection concept",
         detail:
-          "The live product and engineering architecture can be demonstrated without publishing the source of a system designed around personal data and integrations.",
+          "The report proposed an initial six-month ultrasonic inspection interval, a 2.0 mm warning level, and planned replacement at or below 1.5 mm, subject to refinement with real wear-rate data.",
       },
     ],
-    liveUrl: "https://mebot.adihnursyam.com",
+    image: "/work/pln/method.jpg",
+    gallery: [
+      {
+        src: "/work/pln/failure.jpg",
+        alt: "Failed BC-54 conveyor carrying idler shell documented during the PLN internship",
+        caption: "Field evidence / severe abrasive wear and a split carrying-idler shell",
+      },
+      {
+        src: "/work/pln/results.jpg",
+        alt: "Ansys stress and safety-factor results for the BC-54 idler shell",
+        caption: "Simulation / 68.77 MPa maximum stress and 1.7449 minimum safety factor",
+      },
+      {
+        src: "/work/pln/maintenance.jpg",
+        alt: "Condition-based maintenance proposal for BC-54 idler shell thickness inspection",
+        caption: "Proposal / periodic ultrasonic thickness inspection with explicit action thresholds",
+      },
+    ],
+    accent: "#9a7429",
+    evidence: "Internship report, field photographs, measurement-derived load model, and Ansys results",
+  },
+  {
+    slug: "fess-digital-twin",
+    title: "FESS Monitoring & Digital Twin",
+    eyebrow: "Supporting / Mechatronics HMI",
+    year: "2025",
+    role: "HMI & visualization engineer",
+    status: "Engineering interface prototype",
+    summary:
+      "A monitoring interface for a flywheel energy-storage concept, combining MQTT telemetry, time-series views, and a Three.js digital twin.",
+    challenge:
+      "Give operators one legible view of machine state, vibration-oriented signals, and the physical assembly.",
+    response:
+      "Combined typed web components, MQTT messaging, charting, a relational data layer, and React Three Fiber visualization.",
+    outcome:
+      "A deployed technical HMI and public codebase that connect mechatronic context with modern web visualization patterns.",
+    disciplines: ["Mechanical", "Embedded", "Software"],
+    stack: ["Next.js", "MQTT", "Three.js", "Recharts", "Drizzle"],
+    highlights: ["MQTT telemetry", "3D assembly", "Signal views"],
+    architecture: [
+      { label: "Machine", detail: "Flywheel assembly and instrumentation context." },
+      { label: "Messaging", detail: "MQTT carries telemetry into the browser experience." },
+      { label: "Interface", detail: "Charts and a 3D view provide complementary readings of system state." },
+    ],
+    decisions: [
+      { title: "Use 3D only where it explains", detail: "The model is tied to the monitored machine rather than used as decorative WebGL." },
+    ],
+    image: "/work/fess.png",
+    liveUrl: "https://fess-hmi.vercel.app",
+    repoUrl: "https://github.com/soezyxstt/fess-hmi",
     accent: "#6d4ca5",
-    evidence: "Deployed application, private source repository, and documented engineering architecture",
+    evidence: "Public repository, dependencies, commit history, and deployment",
   },
   {
     slug: "iiot-conveyor",
@@ -319,14 +490,6 @@ export const archiveEntries = [
     href: `/work/${project.slug}`,
   })),
   {
-    slug: "fess-digital-twin",
-    title: "FESS Monitoring & Digital Twin",
-    year: "2025",
-    disciplines: ["Mechanical", "Embedded", "Software"] as Discipline[],
-    summary: "A flywheel energy-storage monitoring HMI with MQTT telemetry, vibration-oriented views, and a 3D digital twin.",
-    href: "https://github.com/soezyxstt/fess-hmi",
-  },
-  {
     slug: "gumelar",
     title: "Gumelar Collaboration Hub",
     year: "2026",
@@ -356,15 +519,95 @@ export const archiveEntries = [
     year: "2026",
     disciplines: ["Software", "Platform"] as Discipline[],
     summary: "A content and program portal for Paguyuban Mojang Jajaka Garut.",
-    href: "https://www.pamokagarut.com/",
+    href: "https://github.com/soezyxstt/moka",
+  },
+  {
+    slug: "shaft-misalignment-calculator",
+    title: "Shaft Misalignment Calculator",
+    year: "2025",
+    disciplines: ["Mechanical", "Software"] as Discipline[],
+    summary: "A browser-based engineering calculator for face-and-rim shaft alignment corrections.",
+    href: "https://github.com/soezyxstt/misalignment-calculator",
+  },
+  {
+    slug: "hmm-election-platform",
+    title: "HMM ITB Election Platform",
+    year: "2024",
+    disciplines: ["Software", "Platform"] as Discipline[],
+    summary: "An authenticated, database-backed voting workflow for an internal HMM ITB election.",
+    href: "https://github.com/soezyxstt/pemilu-hmm",
+  },
+  {
+    slug: "engineering-tryout",
+    title: "Engineering Tryout Platform",
+    year: "2025",
+    disciplines: ["Software", "Product"] as Discipline[],
+    summary: "A subject-based practice-test application for engineering problem sets.",
+    href: "https://github.com/soezyxstt/try-out",
+  },
+  {
+    slug: "cakrai-attendance",
+    title: "CAKRAI Internship Attendance",
+    year: "2024",
+    disciplines: ["Software", "Platform"] as Discipline[],
+    summary: "An authenticated attendance workflow built for an organizational internship program.",
+    href: "https://presensi-magang-cakrai.vercel.app",
+  },
+];
+
+export const publicBuilds = [
+  {
+    slug: "shaft-misalignment-calculator",
+    title: "Shaft Misalignment Calculator",
+    description: "Turns face-and-rim readings, machine geometry, and bracket sag into bearing corrections.",
+    stack: ["Next.js", "TypeScript", "Engineering utility"],
+    repoUrl: "https://github.com/soezyxstt/misalignment-calculator",
+  },
+  {
+    slug: "hmm-election-platform",
+    title: "HMM ITB Election Platform",
+    description: "Protected voting flow with typed APIs, authentication, and relational persistence.",
+    stack: ["Next.js", "tRPC", "Prisma", "NextAuth"],
+    repoUrl: "https://github.com/soezyxstt/pemilu-hmm",
+  },
+  {
+    slug: "engineering-tryout",
+    title: "Engineering Tryout Platform",
+    description: "Subject-based engineering practice tests backed by a relational application model.",
+    stack: ["Next.js", "Prisma", "Zod", "Recharts"],
+    repoUrl: "https://github.com/soezyxstt/try-out",
+  },
+  {
+    slug: "cakrai-attendance",
+    title: "CAKRAI Internship Attendance",
+    description: "A responsive attendance application with sign-in and participant workflows.",
+    stack: ["T3 Stack", "Auth", "Prisma", "React"],
+    liveUrl: "https://presensi-magang-cakrai.vercel.app",
+    repoUrl: "https://github.com/soezyxstt/presensi-magang-cakrai",
+  },
+  {
+    slug: "heat-transfer-portal",
+    title: "Heat Transfer Summary Portal",
+    description: "An academic reference interface for convection, phase change, and heat exchangers.",
+    stack: ["Next.js", "KaTeX", "TypeScript"],
+    liveUrl: "https://perpan.vercel.app",
+    repoUrl: "https://github.com/soezyxstt/perpan",
+  },
+  {
+    slug: "futuregen-prototype",
+    title: "FutureGen for Change — v0",
+    description: "A motion-led early prototype for a sustainability and social-impact initiative.",
+    stack: ["Next.js", "Motion", "Lenis"],
+    liveUrl: "https://future-lestari-v-0.vercel.app",
+    repoUrl: "https://github.com/soezyxstt/future-lestari-v.0",
   },
 ];
 
 export const capabilityGroups = [
   {
     label: "Physical system",
-    capabilities: ["Mechanical Design", "CAD", "Actuation", "Machine Constraints"],
-    projects: ["Two-DOF SCARA Robot"],
+    capabilities: ["Mechanical Design", "CAD", "FEA", "Machine Constraints"],
+    projects: ["Two-DOF SCARA Robot", "BC-54 Idler Reliability Study", "FESS Digital Twin"],
   },
   {
     label: "Behavior",
@@ -374,7 +617,7 @@ export const capabilityGroups = [
   {
     label: "Digital product",
     capabilities: ["Web Architecture", "Data Models", "Interfaces", "Infrastructure"],
-    projects: ["Zyx Academy", "HMM ITB Platform", "Me-Bot Personal Assistant", "IAM ITB"],
+    projects: ["Zyx Academy", "MeBot", "HMM ITB Platform", "IAM ITB"],
   },
   {
     label: "Delivery",

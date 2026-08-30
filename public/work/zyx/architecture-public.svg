@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Zyx Academy public system architecture</title>
+  <desc id="desc">A public-safe overview of Zyx Academy showing learner and authoring interfaces, the Next.js product core, canonical knowledge storage, retrieval, AI tutoring, background processing, and the human publication gate.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64756c"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3757d5"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#161a18" flood-opacity="0.08"/>
+    </filter>
+    <style>
+      .bg { fill: #f1ede3; }
+      .ink { fill: #171a18; }
+      .muted { fill: #68716c; }
+      .blue { fill: #3757d5; }
+      .orange { fill: #a1642b; }
+      .surface { fill: #faf7f0; stroke: #c9c4ba; stroke-width: 1.5; }
+      .surface-dark { fill: #171b19; stroke: #171b19; stroke-width: 1.5; }
+      .surface-blue { fill: #e7eaf8; stroke: #3757d5; stroke-width: 1.5; }
+      .surface-orange { fill: #f4e7db; stroke: #a1642b; stroke-width: 1.5; }
+      .line { fill: none; stroke: #64756c; stroke-width: 2; marker-end: url(#arrow); }
+      .line-blue { fill: none; stroke: #3757d5; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .dash { fill: none; stroke: #a7aea9; stroke-width: 1.5; stroke-dasharray: 7 7; }
+      text { font-family: Inter, Arial, sans-serif; }
+      .eyebrow { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; font-weight: 700; letter-spacing: 2.1px; }
+      .title { font-family: Georgia, 'Times New Roman', serif; font-size: 55px; font-weight: 400; letter-spacing: -1.6px; }
+      .subtitle { font-size: 20px; }
+      .stage { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; font-weight: 700; letter-spacing: 1.8px; }
+      .card-title { font-family: Georgia, 'Times New Roman', serif; font-size: 26px; }
+      .card-copy { font-size: 16px; }
+      .small { font-size: 14px; }
+      .white { fill: #f8f5ed; }
+      .chip { fill: #e5e0d6; }
+      .chip-text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 700; letter-spacing: .8px; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="1000"/>
+  <path d="M0 0H1600V8H0Z" fill="#3757d5"/>
+
+  <g transform="translate(70 68)">
+    <text class="eyebrow blue" x="0" y="0">PUBLIC SYSTEM VIEW · ZYX ACADEMY</text>
+    <text class="title ink" x="0" y="72">From verified knowledge to adaptive learning.</text>
+    <text class="subtitle muted" x="0" y="116">A recruiter-facing architecture overview with operational identifiers and security-sensitive internals removed.</text>
+    <g transform="translate(1135 24)">
+      <rect class="chip" x="0" y="0" width="110" height="36" rx="18"/>
+      <text class="chip-text ink" x="55" y="23" text-anchor="middle">NEXT.JS</text>
+      <rect class="chip" x="120" y="0" width="96" height="36" rx="18"/>
+      <text class="chip-text ink" x="168" y="23" text-anchor="middle">TURSO</text>
+      <rect class="chip" x="226" y="0" width="128" height="36" rx="18"/>
+      <text class="chip-text ink" x="290" y="23" text-anchor="middle">CLOUDFLARE</text>
+    </g>
+  </g>
+
+  <text class="stage blue" x="70" y="245">01 · PEOPLE &amp; INTERFACES</text>
+  <g filter="url(#shadow)">
+    <rect class="surface" x="70" y="270" width="300" height="126" rx="16"/>
+    <circle cx="106" cy="306" r="10" fill="#3757d5"/>
+    <text class="card-title ink" x="130" y="316">Learners</text>
+    <text class="card-copy muted" x="98" y="351">Web and PWA learning experience</text>
+    <text class="small muted" x="98" y="375">Materials · quizzes · flashcards · Zyra</text>
+
+    <rect class="surface" x="405" y="270" width="300" height="126" rx="16"/>
+    <circle cx="441" cy="306" r="10" fill="#a1642b"/>
+    <text class="card-title ink" x="465" y="316">Tutors &amp; admins</text>
+    <text class="card-copy muted" x="433" y="351">Author, review, and operate courses</text>
+    <text class="small muted" x="433" y="375">Human approval remains the publish gate</text>
+
+    <rect class="surface" x="740" y="270" width="300" height="126" rx="16"/>
+    <circle cx="776" cy="306" r="10" fill="#68716c"/>
+    <text class="card-title ink" x="800" y="316">Authoring tools</text>
+    <text class="card-copy muted" x="768" y="351">Structured draft and validation workflows</text>
+    <text class="small muted" x="768" y="375">External tools can stage—not publish</text>
+
+    <rect class="surface" x="1075" y="270" width="455" height="126" rx="16"/>
+    <text class="eyebrow orange" x="1104" y="304">PUBLICATION CONTROL</text>
+    <text class="card-title ink" x="1104" y="339">Human-reviewed delivery</text>
+    <text class="card-copy muted" x="1104" y="370">Draft → validate → review → publish</text>
+  </g>
+
+  <path class="line" d="M220 396V440"/>
+  <path class="line" d="M555 396V440"/>
+  <path class="line" d="M890 396V440"/>
+  <path class="line-blue" d="M1302 396V440"/>
+
+  <text class="stage blue" x="70" y="450">02 · PRODUCT CORE</text>
+  <g filter="url(#shadow)">
+    <rect class="surface-dark" x="70" y="472" width="1460" height="202" rx="20"/>
+    <text class="eyebrow white" x="104" y="512">NEXT.JS APPLICATION · AUTHENTICATED PRODUCT BOUNDARY</text>
+
+    <g transform="translate(104 540)">
+      <rect x="0" y="0" width="248" height="98" rx="12" fill="#232825" stroke="#56615b"/>
+      <text class="card-title white" x="22" y="38">Learning experience</text>
+      <text class="small" x="22" y="67" fill="#b9c0bb">Content · practice · progress</text>
+
+      <rect x="272" y="0" width="248" height="98" rx="12" fill="#232825" stroke="#56615b"/>
+      <text class="card-title white" x="294" y="38">Assessment</text>
+      <text class="small" x="294" y="67" fill="#b9c0bb">Scoring · evidence · mastery</text>
+
+      <rect x="544" y="0" width="248" height="98" rx="12" fill="#232825" stroke="#56615b"/>
+      <text class="card-title white" x="566" y="38">Authoring</text>
+      <text class="small" x="566" y="67" fill="#b9c0bb">Canonical-first review workflow</text>
+
+      <rect x="816" y="0" width="248" height="98" rx="12" fill="#232825" stroke="#56615b"/>
+      <text class="card-title white" x="838" y="38">Zyra tutor</text>
+      <text class="small" x="838" y="67" fill="#b9c0bb">Retrieval · pedagogy · validation</text>
+
+      <rect x="1088" y="0" width="268" height="98" rx="12" fill="#232825" stroke="#56615b"/>
+      <text class="card-title white" x="1110" y="38">Operations</text>
+      <text class="small" x="1110" y="67" fill="#b9c0bb">Identity · permissions · delivery</text>
+    </g>
+  </g>
+
+  <path class="line" d="M260 674V727"/>
+  <path class="line" d="M620 674V727"/>
+  <path class="line-blue" d="M1036 674V727"/>
+  <path class="line" d="M1370 674V727"/>
+
+  <text class="stage blue" x="70" y="718">03 · KNOWLEDGE, DATA &amp; DELIVERY</text>
+  <g filter="url(#shadow)">
+    <rect class="surface-orange" x="70" y="742" width="334" height="166" rx="16"/>
+    <text class="eyebrow orange" x="98" y="780">SOURCE OF TRUTH</text>
+    <text class="card-title ink" x="98" y="818">Canonical knowledge</text>
+    <text class="card-copy muted" x="98" y="850">Verified source material becomes</text>
+    <text class="card-copy muted" x="98" y="875">structured concepts and products.</text>
+
+    <rect class="surface" x="430" y="742" width="250" height="166" rx="16"/>
+    <text class="eyebrow blue" x="458" y="780">RELATIONAL</text>
+    <text class="card-title ink" x="458" y="818">Turso</text>
+    <text class="card-copy muted" x="458" y="850">Users, courses, learning</text>
+    <text class="card-copy muted" x="458" y="875">state, and publication records</text>
+
+    <rect class="surface" x="706" y="742" width="250" height="166" rx="16"/>
+    <text class="eyebrow blue" x="734" y="780">MEDIA</text>
+    <text class="card-title ink" x="734" y="818">Cloudflare R2</text>
+    <text class="card-copy muted" x="734" y="850">Source assets and</text>
+    <text class="card-copy muted" x="734" y="875">generated learning media</text>
+
+    <rect class="surface-blue" x="982" y="742" width="250" height="166" rx="16"/>
+    <text class="eyebrow blue" x="1010" y="780">RETRIEVAL</text>
+    <text class="card-title ink" x="1010" y="818">Vectorize</text>
+    <text class="card-copy muted" x="1010" y="850">Semantic discovery over</text>
+    <text class="card-copy muted" x="1010" y="875">approved course knowledge</text>
+
+    <rect class="surface-blue" x="1258" y="742" width="272" height="166" rx="16"/>
+    <text class="eyebrow blue" x="1286" y="780">AI &amp; ASYNC</text>
+    <text class="card-title ink" x="1286" y="818">Gemini + workers</text>
+    <text class="card-copy muted" x="1286" y="850">Validated generation, background</text>
+    <text class="card-copy muted" x="1286" y="875">jobs, realtime, and PDF delivery</text>
+  </g>
+
+  <path class="line-blue" d="M404 825H430"/>
+  <path class="line-blue" d="M956 825H982"/>
+  <path class="line-blue" d="M1232 825H1258"/>
+  <path class="dash" d="M555 908V942H1394V908"/>
+  <text class="small muted" x="974" y="963" text-anchor="middle">Deterministic data and policy layers remain authoritative; AI operates on approved context.</text>
+</svg>

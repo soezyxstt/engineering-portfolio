@@ -29,10 +29,10 @@ export default function AboutPage() {
         </div>
         <div className="about-intro">
           <p className="kicker"><span>Profile / 04</span>About</p>
-          <h1>Engineering is most useful at the boundaries.</h1>
-          <p className="route-lead">I am a mechanical engineer by training and a systems builder by practice.</p>
-          <p>My path moves through robotics, embedded behavior, technical interfaces, web platforms, education, and organizational delivery. The common thread is not variety for its own sake—it is learning enough of each layer to make the complete system work.</p>
-          <p>That approach shaped my two-DOF SCARA project, the HMM ITB platform, industrial HMIs, campus technology work, and Zyx Academy. Each required different tools, but the same habits: make constraints visible, keep interfaces clear, and validate the result.</p>
+          <h1>Software is most useful when it understands the system around it.</h1>
+          <p className="route-lead">I am a software engineer and the founder and CEO of Zyx Academy, with a Mechanical Engineering foundation from ITB.</p>
+          <p>I build full-stack products, AI-enabled learning systems, and software connected to real engineering problems. At Zyx, I lead product and engineering across structured content, assessment, spaced repetition, progress, retrieval-backed tutoring, relational and vector data, cloud infrastructure, and internal authoring systems.</p>
+          <p>Beyond Zyx, I have built campus platforms, a local-first AI assistant, robotics and embedded systems, industrial IoT interfaces, and control projects. At PLN Indonesia Power, I also worked with field maintenance and finite-element and fatigue analysis of critical coal-handling equipment.</p>
           <div className="about-actions"><Link href="/work" className="button button-primary">Explore the work <ArrowRight size={17} /></Link><Link href="/resume" className="button button-secondary">Open résumé</Link></div>
         </div>
       </section>
@@ -40,7 +40,7 @@ export default function AboutPage() {
       <section className="page-section academic-panel">
         <div><p className="kicker"><span>01</span>Academic foundation</p><h2>Institut Teknologi Bandung</h2></div>
         <div className="academic-details">
-          <div><span>Program</span><strong>Mechanical Engineering</strong></div>
+          <div><span>Program</span><strong>Bachelor of Engineering, Mechanical Engineering · Aug 2022–Jul 2026</strong></div>
           <div><span>GPA</span><strong>3.90 / 4.00</strong></div>
           <div><span>Recognition</span><strong>Mechanical Engineering Outstanding Student 2022 — selected as one of three students in the department.</strong></div>
           <div><span>Teaching</span><strong>Statics & Structural Analysis Academic Assistant; Computational Thinking Practicum Assistant.</strong></div>
@@ -58,11 +58,10 @@ export default function AboutPage() {
 
       <section className="about-closing">
         <p className="kicker">What I want to work on</p>
-        <h2>Complex products where physical behavior, software, and people all matter.</h2>
-        <p>Robotics, product engineering, embedded systems, platform work, and multidisciplinary teams are the natural fit.</p>
+        <h2>Complex products where software, knowledge, operations, and people all matter.</h2>
+        <p>Software engineering, full-stack, backend, AI product, and product engineering roles are the strongest fit.</p>
         <Link href="/contact" className="text-link">Start a conversation <ArrowRight size={17} /></Link>
       </section>
     </>
   );
 }
-

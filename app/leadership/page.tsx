@@ -49,7 +49,7 @@ export default function LeadershipPage() {
           index="02"
           eyebrow="Selected evidence"
           title="Roles connected to real work"
-          intro="Periods and descriptions come from the existing portfolio record. Public project links are used where the work can be inspected."
+          intro="Periods and descriptions are synchronized with the current LinkedIn record. Public project links are used where the work can be inspected."
         />
         <div className="experience-list">
           {selected.map((entry, index) => (
@@ -69,4 +69,3 @@ export default function LeadershipPage() {
     </>
   );
 }
-

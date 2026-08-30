@@ -33,6 +33,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
   const currentIndex = projects.findIndex((entry) => entry.slug === project.slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
+  const videoSectionIndex = project.gallery?.length ? "05" : "04";
+  const proofSectionIndex = String(4 + (project.gallery?.length ? 1 : 0) + (project.videos?.length ? 1 : 0)).padStart(2, "0");
 
   return (
     <article className="case-study" style={{ "--project-accent": project.accent } as React.CSSProperties}>
@@ -55,7 +57,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <div className="case-visual">
         {project.image ? (
-          <Image src={project.image} alt={`Interface view of ${project.title}`} fill priority sizes="100vw" className="case-image" />
+          <Image src={project.image} alt={`Interface view of ${project.title}`} fill preload sizes="100vw" className="case-image" />
         ) : (
           <div className="case-schematic" aria-label="SCARA system signal path">
             {project.architecture.map((layer, index) => (
@@ -102,9 +104,49 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
+      {project.gallery?.length ? (
+        <section className="case-section case-gallery-section">
+          <div className="case-section-heading">
+            <p className="kicker"><span>04</span>Product evidence</p>
+            <h2>Selected interface views</h2>
+            <p>Captured from the deployed product. Authenticated screens are shown only in privacy-safe states.</p>
+          </div>
+          <div className="case-gallery">
+            {project.gallery.map((item) => (
+              <figure className={item.wide ? "is-wide" : undefined} key={item.src}>
+                <div className="case-gallery-media">
+                  <Image src={item.src} alt={item.alt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+                </div>
+                <figcaption>{item.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {project.videos?.length ? (
+        <section className="case-section case-video-section">
+          <div className="case-section-heading">
+            <p className="kicker"><span>{videoSectionIndex}</span>System in motion</p>
+            <h2>Selected demonstrations</h2>
+            <p>Short, recruiter-friendly clips. Playback is manual and videos load metadata only until opened.</p>
+          </div>
+          <div className="case-video-grid">
+            {project.videos.map((item) => (
+              <figure key={item.src}>
+                <video controls preload="metadata" playsInline muted poster={item.poster} aria-label={item.title}>
+                  <source src={item.src} type="video/mp4" />
+                </video>
+                <figcaption>{item.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="case-section case-proof">
         <div>
-          <p className="kicker"><span>04</span>Technical footprint</p>
+          <p className="kicker"><span>{proofSectionIndex}</span>Technical footprint</p>
           <h2>Stack in context</h2>
         </div>
         <div>

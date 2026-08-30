@@ -8,7 +8,7 @@ export function Footer() {
         <p className="kicker">Contact / Jakarta time</p>
         <h2>Let’s build the whole system.</h2>
         <p>
-          Open to software, robotics, mechatronics, product engineering, and founding-engineer conversations.
+          Open to software engineering, full-stack, backend, AI product, and product-engineering conversations.
         </p>
         <a href="mailto:soezyxst@gmail.com" className="text-link">
           soezyxst@gmail.com <ArrowUpRight size={18} />
