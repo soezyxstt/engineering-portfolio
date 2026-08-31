@@ -1,17 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import profilePhoto from "@/public/me_photo.jpeg";
-import { projects } from "@/data/portfolio";
+import { capabilityGroups, projects } from "@/data/portfolio";
 import experience from "@/data/experience.json";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { CapabilityMap } from "@/components/home/CapabilityMap";
 import { FeaturedWorkIndex } from "@/components/home/FeaturedWorkIndex";
-import { PublicBuildIndex } from "@/components/home/PublicBuildIndex";
+import { TypedSpecialty } from "@/components/home/TypedSpecialty";
 import { recognition } from "@/data/recognition";
 
 export default function Home() {
-  const flagship = projects.filter((project) => project.flagship);
+  const featuredSlugs = [
+    "scara-robot",
+    "zyx-academy",
+    "hmm-itb-platform",
+    "iam-itb",
+    "pemira-platform",
+    "mechanical-festival",
+    "pamoka",
+  ];
+  const featuredProjects = featuredSlugs
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project): project is (typeof projects)[number] => Boolean(project));
   const selectedExperience = experience.filter((entry) =>
     ["GUMELAR", "PLN Indonesia Power", "Himpunan Mahasiswa Mesin", "Forum Mahasiswa Garut"].some((name) =>
       entry.company.includes(name),
@@ -20,26 +30,23 @@ export default function Home() {
 
   return (
     <>
-      <section className="home-hero">
-        <div className="hero-copy">
-          <p className="kicker hero-kicker">
-            <span>Adi Haditya Nursyam</span>
-            Bandung, Indonesia · GMT+7
-          </p>
-          <h1>
-            Engineering between
-            <em> atoms & software.</em>
-          </h1>
+      <section className="home-hero" data-reveal>
+        <div className="hero-intro">
+          <p className="kicker hero-kicker"><span>Portfolio / 2026</span>Bandung, Indonesia</p>
+          <h1>I build software for systems that have to work.</h1>
+        </div>
+
+        <div className="hero-brief">
           <p className="hero-statement">
-            Software engineer and founder building full-stack products and AI-enabled learning systems—grounded in mechanical engineering, robotics, and real operational constraints.
+            I&apos;m Adi, a software engineer and founder working across full stack products, backend systems, and applied AI, with a foundation in mechanical engineering and robotics.
           </p>
-          <p className="hero-availability"><i aria-hidden="true" /><span>Open to software, backend, AI product & product engineering roles</span></p>
+          <p className="hero-availability">Current practice: <TypedSpecialty /></p>
           <div className="hero-actions">
             <Link href="/work" className="button button-primary">
-              Explore selected work <ArrowRight size={17} />
+              Selected work <ArrowRight size={17} />
             </Link>
             <Link href="/resume" className="button button-secondary">
-              View résumé <Download size={16} />
+              Résumé <Download size={16} />
             </Link>
           </div>
           <div className="hero-links" aria-label="Professional links">
@@ -53,62 +60,28 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero-system" role="img" aria-label="Adi's engineering practice across mechanics, control, software, and product delivery">
-          <span className="system-title">ONE PRACTICE / FOUR LAYERS</span>
-          <div className="system-stage system-stage-1">
-            <span>01</span>
-            <strong>Mechanics</strong>
-            <small>geometry · loads · actuation</small>
-          </div>
-          <div className="system-stage system-stage-2">
-            <span>02</span>
-            <strong>Control</strong>
-            <small>motion · sensing · firmware</small>
-          </div>
-          <div className="system-stage system-stage-3">
-            <span>03</span>
-            <strong>Interface</strong>
-            <small>data · software · operation</small>
-          </div>
-          <div className="system-stage system-stage-4">
-            <span>04</span>
-            <strong>Product</strong>
-            <small>people · delivery · iteration</small>
-          </div>
-          <div className="system-core">
-            <span>AHN</span>
-            <small>whole-system view</small>
-          </div>
-          <span className="system-coordinate coordinate-x">BUILD / TEST / ITERATE</span>
-          <span className="system-coordinate coordinate-y">BANDUNG / ID</span>
+        <div className="hero-proof" aria-label="Profile highlights">
+          <div><span>01 / Current work</span><strong>Full-stack & AI products</strong></div>
+          <div><span>02 / Foundation</span><strong>Mechanical Engineering, ITB</strong></div>
+          <div><span>03 / Academic record</span><strong>3.90 / 4.00 GPA</strong></div>
+          <div><span>04 / Ownership</span><strong>Founder & CEO, Zyx Academy</strong></div>
         </div>
-
-        <a className="hero-scroll" href="#selected-systems">
-          Selected systems <ArrowDown size={15} />
-        </a>
       </section>
 
-      <section className="credibility-strip" aria-label="Profile highlights">
-        <div><span>Current focus</span><strong>Full-stack & AI products</strong></div>
-        <div><span>Academic record</span><strong>3.90 / 4.00 GPA</strong></div>
-        <div><span>Recognition</span><strong>Outstanding Student · ITB Mechanical Engineering</strong></div>
-        <div><span>Ownership</span><strong>Founder & CEO · Zyx Academy</strong></div>
-      </section>
-
-      <section id="selected-systems" className="page-section selected-systems">
+      <section id="selected-systems" className="page-section selected-systems" data-reveal>
         <SectionHeading
           index="01"
           eyebrow="Selected case studies"
-          title="Read the system—not just the screenshot."
+          title="Read the system, not just the screenshot."
           intro="Each case study makes the challenge, my role, the architecture, and the evidence visible. Hover or focus to preview; open one to inspect the decisions behind it."
         />
-        <FeaturedWorkIndex projects={flagship} />
+        <FeaturedWorkIndex projects={featuredProjects} />
         <div className="section-action">
           <Link href="/work" className="text-link">View all selected work <ArrowRight size={17} /></Link>
         </div>
       </section>
 
-      <section className="page-section experience-preview">
+      <section className="page-section experience-preview" data-reveal>
         <SectionHeading
           index="02"
           eyebrow="Experience & organizations"
@@ -130,12 +103,12 @@ export default function Home() {
         <div className="section-action"><Link href="/leadership" className="text-link">View the full experience record <ArrowRight size={17} /></Link></div>
       </section>
 
-      <section className="page-section recognition-section">
+      <section className="page-section recognition-section" data-reveal>
         <SectionHeading
           index="03"
           eyebrow="Recognition"
           title="Selected by institutions, tested in competition."
-          intro="A compact record of academic, robotics, and regional recognition—kept factual and connected to the institution that issued it."
+          intro="A compact record of academic, robotics, and regional recognition, kept factual and connected to the institution that issued it."
         />
         <div className="recognition-list">
           {recognition.map((item, index) => (
@@ -148,28 +121,28 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="page-section public-builds-section">
+      <section className="page-section capability-section" data-reveal>
         <SectionHeading
           index="04"
-          eyebrow="Public code & deployments"
-          title="More shipped work, kept in proportion."
-          intro="A broader sample of public web work verified from GitHub repository metadata, READMEs, and linked deployments. Supporting projects stay concise so the strongest case studies remain clear."
-        />
-        <PublicBuildIndex />
-        <div className="section-action"><Link href="/archive" className="text-link">Browse the complete project archive <ArrowRight size={17} /></Link></div>
-      </section>
-
-      <section className="page-section capability-section">
-        <SectionHeading
-          index="05"
           eyebrow="Engineering range"
-          title="Breadth, organized as a system."
-          intro="Mechanical engineering and software are not separate identities here. They are adjacent layers of how a product behaves, communicates, and reaches people."
+          title="Four areas, one practical method."
+          intro="The range is stated plainly and tied to work. No proficiency meters, only capabilities and the projects where they were applied."
         />
-        <CapabilityMap />
+        <div className="capability-ledger">
+          {capabilityGroups.map((group, index) => (
+            <article key={group.label}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{group.label}</h3>
+                <ul>{group.capabilities.map((capability) => <li key={capability}>{capability}</li>)}</ul>
+              </div>
+              <p><span>Demonstrated in</span>{group.projects.join(" · ")}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <section className="page-section profile-section">
+      <section className="page-section profile-section" data-reveal>
         <div className="profile-photo-wrap">
           <div className="profile-photo-frame">
             <Image
@@ -184,10 +157,10 @@ export default function Home() {
           </div>
         </div>
         <div className="profile-copy">
-          <p className="kicker"><span>06</span>Profile</p>
+          <p className="kicker"><span>05</span>Profile</p>
           <h2>Software engineer by practice. Mechanical engineer by foundation.</h2>
           <p className="profile-lead">
-            I work across product architecture, frontend and backend development, data, AI workflows, and cloud infrastructure—without losing sight of the physical systems and people the software serves.
+            I work across product architecture, frontend and backend development, data, AI workflows, and cloud infrastructure without losing sight of the physical systems and people the software serves.
           </p>
           <p>
             At Institut Teknologi Bandung, mechanics, computation, and experimental reasoning became the foundation. Zyx Academy, campus platforms, robotics, and industrial work turned it into a practice of translating complex requirements into practical products.
@@ -202,8 +175,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="founder-spotlight">
-        <div className="founder-index">07</div>
+      <section className="founder-spotlight" data-reveal>
+        <div className="founder-index">06</div>
         <div>
           <p className="kicker">Founder spotlight / Zyx Academy</p>
           <h2>Building an AI learning product means owning the knowledge system.</h2>

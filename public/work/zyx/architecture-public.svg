@@ -73,7 +73,7 @@
     <circle cx="776" cy="306" r="10" fill="#68716c"/>
     <text class="card-title ink" x="800" y="316">Authoring tools</text>
     <text class="card-copy muted" x="768" y="351">Structured draft and validation workflows</text>
-    <text class="small muted" x="768" y="375">External tools can stage—not publish</text>
+    <text class="small muted" x="768" y="375">External tools can stage, not publish</text>
 
     <rect class="surface" x="1075" y="270" width="455" height="126" rx="16"/>
     <text class="eyebrow orange" x="1104" y="304">PUBLICATION CONTROL</text>

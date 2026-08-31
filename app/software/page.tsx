@@ -17,7 +17,7 @@ export default function SoftwarePage() {
     <DisciplineLanding
       eyebrow="Software"
       title="Digital products with real operating context."
-      intro="I build web platforms as systems of users, data, workflows, infrastructure, and product decisions—not as collections of pages."
+      intro="I build web platforms as systems of users, data, workflows, infrastructure, and product decisions, not as collections of pages."
       statement="The strongest examples serve education, engineering communities, alumni operations, or campus processes, giving the architecture a concrete reason to exist."
       projects={selected}
       capabilities={[
@@ -29,4 +29,3 @@ export default function SoftwarePage() {
     />
   );
 }
-

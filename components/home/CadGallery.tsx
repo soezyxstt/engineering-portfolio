@@ -36,7 +36,7 @@ function BlueprintGearTile() {
       <circle cx="50" cy="50" r="40" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.5" strokeDasharray="2 2" />
       <circle cx="50" cy="50" r="34" stroke="currentColor" strokeOpacity="0.55" strokeWidth="0.8" />
       <circle cx="50" cy="50" r="9" stroke="currentColor" strokeOpacity="0.7" strokeWidth="0.8" />
-      {/* teeth ticks — coords rounded so server/client SSR strings match exactly */}
+      {/* teeth ticks, with coordinates rounded so server and client SSR strings match exactly */}
       {teeth.map((_, i) => {
         const a = (i / teeth.length) * Math.PI * 2;
         const x1 = (50 + Math.cos(a) * 34).toFixed(3);

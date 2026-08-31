@@ -37,7 +37,7 @@ export function DisciplineLanding({ eyebrow, title, intro, statement, projects, 
           index="02"
           eyebrow="Working range"
           title="What I bring to the problem"
-          intro="Capabilities are paired with the decisions they support—not presented as an ungrounded technology inventory."
+          intro="Capabilities are paired with the decisions they support, not presented as an ungrounded technology inventory."
         />
         <div className="principle-grid">
           {capabilities.map((capability, index) => (
@@ -53,4 +53,3 @@ export function DisciplineLanding({ eyebrow, title, intro, statement, projects, 
     </>
   );
 }
-

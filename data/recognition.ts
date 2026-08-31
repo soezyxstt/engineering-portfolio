@@ -6,7 +6,7 @@ export const recognition = [
     detail: "Selected as one of three outstanding students from ITB's 2022 Mechanical Engineering cohort for academic performance and student achievement.",
   },
   {
-    title: "Kontes Robot Indonesia 2024 — Finalist",
+    title: "Kontes Robot Indonesia 2024, Finalist",
     issuer: "Balai Pengembangan Talenta Indonesia / Kemendikbudristek",
     date: "July 2024",
     detail: "Advanced to the KRAI finalist stage as a member of the Unit Robotika ITB team.",

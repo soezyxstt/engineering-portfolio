@@ -12,8 +12,9 @@ type ProjectCardProps = {
 export function ProjectCard({ project, index, large = false }: ProjectCardProps) {
   return (
     <article
-      className={`project-card ${large ? "project-card-large" : ""}`}
-      style={{ "--project-accent": project.accent } as React.CSSProperties}
+      className={`project-card ${large ? "project-card-large" : ""} ${large && index % 2 === 0 ? "project-card-reversed" : ""}`}
+      style={{ "--project-accent": project.accent, "--reveal-delay": `${Math.min(index - 1, 4) * 70}ms` } as React.CSSProperties}
+      data-reveal
     >
       <Link href={`/work/${project.slug}`} className="project-card-link">
         <div className="project-visual">
@@ -59,4 +60,3 @@ export function ProjectCard({ project, index, large = false }: ProjectCardProps)
     </article>
   );
 }
-

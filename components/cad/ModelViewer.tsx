@@ -26,7 +26,7 @@ type ModelViewerProps = {
 };
 
 /* -------------------------------------------------------------------------- */
-/* Procedural placeholder — a metallic gear, shown until a real GLB is added. */
+/* Procedural placeholder, a metallic gear shown until a real GLB is added. */
 /* -------------------------------------------------------------------------- */
 function makeGearGeometry({
   teeth = 18,
