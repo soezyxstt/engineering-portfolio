@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const project = getProject(slug);
   if (!project) return {};
   return {
-    title: `${project.title} — Engineering Case Study`,
+    title: `${project.title} | Engineering Case Study`,
     description: project.summary,
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
-      title: `${project.title} — Engineering Case Study`,
+      title: `${project.title} | Engineering Case Study`,
       description: project.summary,
       images: project.image ? [project.image] : ["/me_photo.jpeg"],
     },

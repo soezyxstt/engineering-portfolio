@@ -1,5 +1,16 @@
 [
   {
+    "company": "Zyx Academy",
+    "location": "Bandung, Jawa Barat",
+    "positions": [
+      {
+        "role": "Chief Executive Officer",
+        "period": "Aug 2025 - Present",
+        "glimpse": "Lead strategy, product development, engineering, content quality, and learning operations for a tutoring initiative and AI-enabled university learning platform."
+      }
+    ]
+  },
+  {
     "company": "GUMELAR (Guyub Mahasiswa Lembur Garut)",
     "location": "Garut, Jawa Barat",
     "positions": [
@@ -27,13 +38,13 @@
     "positions": [
       {
         "role": "Head of Information and Technology Development Sub Bureau",
-        "period": "Aug 2025 - Present",
-        "glimpse": "Leading digital transformation and optimizing information flow across organizational stakeholders."
+        "period": "Aug 2025 - May 2026",
+        "glimpse": "Led digital transformation and technical delivery across the HMM learning and community platform, including member-facing services, administrative workflows, identity, relational data, notifications, and PWA capabilities."
       },
       {
         "role": "Web Development Engineer",
         "period": "Aug 2024 - Jul 2025",
-        "glimpse": "Served as a technical bridge for digital platforms and front-end engineering."
+        "glimpse": "Developed frontend, backend, data, and deployment workflows that later evolved into HMM ITB's broader learning and community platform."
       },
       {
         "role": "Member",
@@ -49,7 +60,7 @@
       {
         "role": "President",
         "period": "Jan 2025 - Aug 2025",
-        "glimpse": "Led a seven-month organizational renewal, restoring governance and regeneration while directing academic, community, communications, research, administration, and finance functions."
+        "glimpse": "Led a seven-month organizational renewal, restoring governance and regeneration while directing academic support, scholarships, communications, community development, external relations, research, administration, and finance."
       },
       {
         "role": "Head of Academic Division",
@@ -57,7 +68,7 @@
         "glimpse": "Led peer mentoring, study support, learning resources, and academic-development activities for members navigating ITB's first-year program."
       },
       {
-        "role": "Event Lead — GANTAR",
+        "role": "Event Lead, GANTAR",
         "period": "Dec 2023 - Mar 2024",
         "glimpse": "Led higher-education outreach across Garut, coordinating school visits, volunteers, presentations, and stakeholder communication."
       }
@@ -75,12 +86,12 @@
       {
         "role": "Chief Executive of Sekolah URO",
         "period": "Aug 2024 - Feb 2025",
-        "glimpse": "Managed organizational training and leadership development for new members."
+        "glimpse": "Led Sekolah URO, coordinating program planning, instructors, learning activities, and execution for new-member technical and organizational development."
       },
       {
         "role": "Human Resources Manager",
         "period": "Oct 2023 - May 2024",
-        "glimpse": "Coordinated recruitment and internal member development programs."
+        "glimpse": "Coordinated recruitment, onboarding, internal development, and team organization alongside the unit's technical programs."
       }
     ]
   },
@@ -107,12 +118,22 @@
       {
         "role": "Research And Development Officer",
         "period": "Nov 2023 - Nov 2025",
-        "glimpse": "Conducted community-focused R&D and team-based regional development."
+        "glimpse": "Contributed to organizational research, program development, and evaluation across cultural, tourism, community, and regional initiatives."
+      },
+      {
+        "role": "Jajaka Calakan",
+        "period": "Nov 2023 - Nov 2025",
+        "glimpse": "Represented Garut Regency in youth, cultural, tourism, community, and organizational initiatives after receiving the Jajaka Calakan Kabupaten Garut 2023 recognition."
       },
       {
         "role": "Event Coordinator",
         "period": "Aug 2024",
-        "glimpse": "Coordinated logistics and leadership for major regional events."
+        "glimpse": "Planned and led the event team for Pamoka's 79th Indonesian Independence Day celebration."
+      },
+      {
+        "role": "Presidium II",
+        "period": "Jul 2024",
+        "glimpse": "Led the association-memorandum session during Pamoka Kabupaten Garut's first Grand Deliberation."
       }
     ]
   },
@@ -122,7 +143,7 @@
     "positions": [
       {
         "role": "Academic Physics & Math Tutor",
-        "period": "Apr 2024 - Present",
+        "period": "Apr 2024 - Dec 2025",
         "glimpse": "Providing technical instruction in physics and mathematics for engineering students."
       }
     ]
@@ -134,7 +155,29 @@
       {
         "role": "Head of Information Technology Department",
         "period": "Nov 2023 - Apr 2024",
-        "glimpse": "Developed web infrastructure and media platforms for university-wide elections."
+        "glimpse": "Led delivery of the university-wide election platform across public information, authenticated workflows, application data, administrative tooling, typed APIs, and data visualization."
+      }
+    ]
+  },
+  {
+    "company": "Parade Wisuda Oktober ITB 2024",
+    "location": "Bandung, Jawa Barat",
+    "positions": [
+      {
+        "role": "Head of Information Technology Department",
+        "period": "Aug 2024 - Jan 2025",
+        "glimpse": "Led the committee's information technology function and coordinated web and digital-system requirements for event communications and operations."
+      }
+    ]
+  },
+  {
+    "company": "Mechanical Engineering ITB 2022, Orpheus Engine",
+    "location": "Bandung, Jawa Barat",
+    "positions": [
+      {
+        "role": "Academic Tutor",
+        "period": "Aug 2023 - Aug 2026",
+        "glimpse": "Provided peer academic support through concept review, structured problem-solving sessions, and individual or group discussions for mechanical engineering students."
       }
     ]
   },

@@ -64,7 +64,7 @@ export default async function CadPage({
           </div>
           {!model.model && (
             <p className="mt-3 font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[color:var(--muted)]">
-              ▲ Showing a procedural placeholder — drop{" "}
+              ▲ Showing a procedural placeholder, drop{" "}
               <span className="text-accent">/public/models/{model.id}.glb</span> in to load
               the real assembly.
             </p>

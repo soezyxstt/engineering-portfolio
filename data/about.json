@@ -2,11 +2,11 @@
   "bio": [
     "I am a software engineer and the founder and CEO of Zyx Academy, with a Mechanical Engineering background from Institut Teknologi Bandung. I build full-stack products, AI-enabled learning systems, and software for real engineering problems.",
     "At Zyx Academy, I lead product and engineering across structured learning content, assessments, spaced repetition, student progress, retrieval-backed AI tutoring, relational and vector data, cloud infrastructure, and internal authoring workflows.",
-    "My broader work spans campus platforms, a local-first AI assistant, robotics, embedded systems, industrial IoT, control systems, and power-plant maintenance analysis—including finite-element and fatigue analysis of critical coal-handling equipment at PLN Indonesia Power."
+    "My broader work spans campus platforms, a local-first AI assistant, robotics, embedded systems, industrial IoT, control systems, and power-plant maintenance analysis, including finite-element and fatigue analysis of critical coal-handling equipment at PLN Indonesia Power."
   ],
   "education": {
     "institution": "Institut Teknologi Bandung",
     "major": "Mechanical Engineering",
-    "description": "Bachelor of Engineering, Aug 2022–Jul 2026. GPA: 3.90/4.00. Mechanical systems and analytical engineering form the physical foundation of a software and systems practice."
+    "description": "Bachelor of Engineering, Aug 2022 to Jul 2026. GPA: 3.90/4.00. Mechanical systems and analytical engineering form the physical foundation of a software and systems practice."
   }
 }

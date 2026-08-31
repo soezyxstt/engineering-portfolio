@@ -1,16 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Mono, Syne } from "next/font/google";
+import { DM_Mono } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollEffects } from "@/components/ui/ScrollEffects";
 import "./globals.css";
-
-const syne = Syne({
-  variable: "--font-syne",
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  display: "swap",
-});
 
 const dmMono = DM_Mono({
   variable: "--font-dm-mono",
@@ -24,7 +18,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adihnursyam.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Adi Haditya Nursyam — Software Engineer & Founder",
+    default: "Adi Haditya Nursyam | Software Engineer & Founder",
     template: "%s | Adi Haditya Nursyam",
   },
   description:
@@ -43,7 +37,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Adi Haditya Nursyam — Software Engineer & Founder",
+    title: "Adi Haditya Nursyam | Software Engineer & Founder",
     description: "Full-stack products and AI-enabled systems, grounded in mechanical engineering and robotics.",
     url: siteUrl,
     siteName: "Adi Haditya Nursyam",
@@ -53,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adi Haditya Nursyam — Software Engineer & Founder",
+    title: "Adi Haditya Nursyam | Software Engineer & Founder",
     description: "I build full-stack products and AI-enabled systems across digital and physical layers.",
     images: ["/me_photo.jpeg"],
   },
@@ -61,8 +55,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: "light",
-  themeColor: "#f2efe7",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f2efe7" },
+    { media: "(prefers-color-scheme: dark)", color: "#111310" },
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -78,11 +75,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <ViewTransitions>
-      <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
+      <html lang="en" className={dmMono.variable} suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var t=localStorage.getItem("portfolio-theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}})();`,
+            }}
+          />
+        </head>
         <body>
           <a className="skip-link" href="#main-content">
             Skip to content
           </a>
+          <ScrollEffects />
           <Header />
           <main id="main-content">{children}</main>
           <Footer />

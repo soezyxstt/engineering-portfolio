@@ -129,7 +129,7 @@ export const projects: Project[] = [
     slug: "zyx-academy",
     title: "Zyx Academy",
     eyebrow: "Flagship / AI Learning Platform",
-    year: "2024—Now",
+    year: "2024 to Now",
     role: "Founder & CEO · Product and engineering lead",
     status: "Active AI-enabled learning platform",
     summary:
@@ -197,7 +197,7 @@ export const projects: Project[] = [
     summary:
       "A local-first personal assistant for capturing unstructured thoughts, turning them into actions, and managing the workspace through an agent interface.",
     challenge:
-      "Make fast, messy capture useful without forcing people to organize every thought up front—or making private notes depend on a constant network connection.",
+      "Make fast, messy capture useful without forcing people to organize every thought up front or making private notes depend on a constant network connection.",
     response:
       "Designed an IndexedDB-first experience with an offline write queue, structured AI triage, semantic memory, a client-side vault, and an agent mode for changing workspace behavior through natural language.",
     outcome:
@@ -247,7 +247,7 @@ export const projects: Project[] = [
     slug: "hmm-itb-platform",
     title: "HMM ITB Platform",
     eyebrow: "Flagship / Community Infrastructure",
-    year: "2025—2026",
+    year: "2025 to 2026",
     role: "Technical lead & full-stack engineer",
     status: "Deployed community platform",
     summary:
@@ -301,7 +301,7 @@ export const projects: Project[] = [
     response:
       "Measured the component in the field, translated the 800 TPH operating context into a 1,234.78 N equivalent load, built a simplified ASTM A36 shaft-and-shell model, and compared static and fatigue results with physical failure evidence.",
     outcome:
-      "The model returned 68.77 MPa maximum von Mises stress, a 1.7449 minimum static safety factor, and a pure-fatigue prediction beyond one million cycles. That discrepancy redirected the root-cause hypothesis toward abrasive wear, wall thinning, and subsequent fatigue fracture—and informed a proposed ultrasonic thickness-inspection program.",
+      "The model returned 68.77 MPa maximum von Mises stress, a 1.7449 minimum static safety factor, and a pure-fatigue prediction beyond one million cycles. That discrepancy redirected the root-cause hypothesis toward abrasive wear, wall thinning, and subsequent fatigue fracture, and informed a proposed ultrasonic thickness-inspection program.",
     disciplines: ["Mechanical"],
     stack: ["Ansys Workbench", "Finite Element Analysis", "Failure Analysis", "Field Measurement", "Condition-Based Maintenance"],
     highlights: ["68.77 MPa maximum stress", "1.7449 minimum safety factor", ">1M-cycle pure-fatigue prediction"],
@@ -386,7 +386,7 @@ export const projects: Project[] = [
     slug: "iiot-conveyor",
     title: "IIoT Conveyor Interface",
     eyebrow: "Supporting / Industrial Automation",
-    year: "2025—2026",
+    year: "2025 to 2026",
     role: "Full-stack HMI engineer",
     status: "Deployed laboratory interface",
     summary:
@@ -418,7 +418,7 @@ export const projects: Project[] = [
     slug: "pemira-platform",
     title: "PEMIRA KM ITB Platform",
     eyebrow: "Supporting / Election Infrastructure",
-    year: "2023—2024",
+    year: "2023 to 2024",
     role: "Head of Information Technology",
     status: "Team-delivered university platform",
     summary:
@@ -443,8 +443,74 @@ export const projects: Project[] = [
     image: "/work/pemirakmitb.png",
     liveUrl: "https://pemirakmitb.vercel.app",
     repoUrl: "https://github.com/soezyxstt/web-pemira",
+    flagship: true,
     accent: "#b43b36",
     evidence: "Public team repository, README, dependency graph, Docker configuration, and role history",
+  },
+  {
+    slug: "mechanical-festival",
+    title: "Mechanical Festival 2025",
+    eyebrow: "Selected / Event Platform",
+    year: "2025",
+    role: "Full stack engineer",
+    status: "Deployed event and competition platform",
+    summary:
+      "A full stack event platform combining public program information with authentication, participant registration, team workflows, and administrative tooling.",
+    challenge:
+      "Bring promotion, participant onboarding, competition registration, and organizer operations into one coherent experience for a public engineering event.",
+    response:
+      "Built a typed Next.js application with authenticated participant flows, relational data, managed media, and organizer tooling for the competition lifecycle.",
+    outcome:
+      "A deployed platform that serves both the public event presence and the operational workflows behind registration and team management.",
+    disciplines: ["Software", "Platform", "Product"],
+    stack: ["Next.js", "TypeScript", "Prisma", "Auth.js", "Cloudinary"],
+    highlights: ["Participant workflows", "Team registration", "Organizer tooling"],
+    architecture: [
+      { label: "Public site", detail: "Program, competition, and event information for prospective participants." },
+      { label: "Identity", detail: "Authenticated access connects participants to their registration state." },
+      { label: "Operations", detail: "Team data, registration records, and managed media support organizer workflows." },
+    ],
+    decisions: [
+      { title: "Join promotion with operations", detail: "The public experience and participant workflows share one application rather than splitting the event across unrelated tools." },
+    ],
+    image: "/work/mfest.png",
+    liveUrl: "https://m-fest-theta.vercel.app/",
+    flagship: true,
+    accent: "#9a482f",
+    evidence: "Live deployment, application surface, and project metadata",
+  },
+  {
+    slug: "pamoka",
+    title: "Pamoka Garut",
+    eyebrow: "Selected / Organization Platform",
+    year: "2026",
+    role: "Product and full stack engineering",
+    status: "Deployed organization platform",
+    summary:
+      "The official digital presence for Paguyuban Mojang Jajaka Kabupaten Garut, bringing identity, programs, news, and recruitment information into one responsive platform.",
+    challenge:
+      "Represent a regional organization with enough editorial flexibility for changing programs while keeping the public experience clear and distinctive.",
+    response:
+      "Built a responsive Next.js platform with structured content, program communication, news, and recruitment information supported by a relational application model.",
+    outcome:
+      "A live organizational platform that gives Pamoka one maintainable home for public storytelling and operational information.",
+    disciplines: ["Software", "Platform", "Product"],
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Prisma"],
+    highlights: ["Official platform", "Structured content", "Responsive storytelling"],
+    architecture: [
+      { label: "Identity", detail: "A cohesive public presentation for the organization and its programs." },
+      { label: "Content", detail: "Structured news, program, and recruitment information supports ongoing updates." },
+      { label: "Application", detail: "A typed Next.js interface connects responsive presentation with relational content." },
+    ],
+    decisions: [
+      { title: "Design for an evolving organization", detail: "The site treats programs and recruitment as maintained content rather than fixed campaign pages." },
+    ],
+    image: "/work/pamoka.png",
+    liveUrl: "https://www.pamokagarut.com/",
+    repoUrl: "https://github.com/soezyxstt/moka",
+    flagship: true,
+    accent: "#315f49",
+    evidence: "Live deployment, public repository, and application metadata",
   },
   {
     slug: "iam-itb",
@@ -470,7 +536,7 @@ export const projects: Project[] = [
       { label: "Data & media", detail: "Relational content, migration scripts, and object storage." },
     ],
     decisions: [
-      { title: "Design for editors", detail: "Recent repository work focuses on moderation, authoring guidance, and operational content quality—not only the public UI." },
+      { title: "Design for editors", detail: "Recent repository work focuses on moderation, authoring guidance, and operational content quality, not only the public UI." },
     ],
     image: "/work/iam-itb.png",
     liveUrl: "https://iam-omega.vercel.app",
@@ -506,30 +572,6 @@ export const archiveEntries = [
     href: "https://sentuhundang.vercel.app/",
   },
   {
-    slug: "mechanical-festival",
-    title: "Mechanical Festival 2025",
-    year: "2025",
-    disciplines: ["Software", "Product"] as Discipline[],
-    summary: "An event website focused on clear program communication and visual identity.",
-    href: "https://m-fest-theta.vercel.app/",
-  },
-  {
-    slug: "pamoka",
-    title: "Pamoka Garut",
-    year: "2026",
-    disciplines: ["Software", "Platform"] as Discipline[],
-    summary: "A content and program portal for Paguyuban Mojang Jajaka Garut.",
-    href: "https://github.com/soezyxstt/moka",
-  },
-  {
-    slug: "shaft-misalignment-calculator",
-    title: "Shaft Misalignment Calculator",
-    year: "2025",
-    disciplines: ["Mechanical", "Software"] as Discipline[],
-    summary: "A browser-based engineering calculator for face-and-rim shaft alignment corrections.",
-    href: "https://github.com/soezyxstt/misalignment-calculator",
-  },
-  {
     slug: "hmm-election-platform",
     title: "HMM ITB Election Platform",
     year: "2024",
@@ -556,13 +598,6 @@ export const archiveEntries = [
 ];
 
 export const publicBuilds = [
-  {
-    slug: "shaft-misalignment-calculator",
-    title: "Shaft Misalignment Calculator",
-    description: "Turns face-and-rim readings, machine geometry, and bracket sag into bearing corrections.",
-    stack: ["Next.js", "TypeScript", "Engineering utility"],
-    repoUrl: "https://github.com/soezyxstt/misalignment-calculator",
-  },
   {
     slug: "hmm-election-platform",
     title: "HMM ITB Election Platform",
@@ -595,7 +630,7 @@ export const publicBuilds = [
   },
   {
     slug: "futuregen-prototype",
-    title: "FutureGen for Change — v0",
+    title: "FutureGen for Change, v0",
     description: "A motion-led early prototype for a sustainability and social-impact initiative.",
     stack: ["Next.js", "Motion", "Lenis"],
     liveUrl: "https://future-lestari-v-0.vercel.app",

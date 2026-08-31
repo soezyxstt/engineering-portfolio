@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 const navItems = [
   { label: "Work", href: "/work" },
@@ -22,12 +22,9 @@ export function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="brand" aria-label="Adi Haditya Nursyam, home" onClick={() => setOpen(false)}>
-          <span className="brand-mark">
-            <Image src="/logo-transparent.png" alt="" fill sizes="40px" className="object-contain" />
-          </span>
           <span className="brand-copy">
             <strong>Adi Haditya Nursyam</strong>
-            <small>Software Engineer · AI Products</small>
+            <small>Software engineer & founder</small>
           </span>
         </Link>
 
@@ -41,6 +38,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <ThemeSwitcher compact />
           <Link href="/resume" className="nav-resume">
             Résumé
           </Link>
@@ -58,7 +56,13 @@ export function Header() {
         </button>
       </div>
 
-      <nav id="mobile-navigation" className={`mobile-nav ${open ? "is-open" : ""}`} aria-label="Mobile navigation">
+      <nav
+        id="mobile-navigation"
+        className={`mobile-nav ${open ? "is-open" : ""}`}
+        aria-label="Mobile navigation"
+        aria-hidden={!open}
+        inert={!open}
+      >
         {navItems.map((item, index) => (
           <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>
             <span>{String(index + 1).padStart(2, "0")}</span>
@@ -71,6 +75,7 @@ export function Header() {
         <Link href="/resume" onClick={() => setOpen(false)}>
           <span>07</span>Résumé
         </Link>
+        <div className="mobile-theme-row"><span>08</span><ThemeSwitcher /></div>
       </nav>
     </header>
   );
