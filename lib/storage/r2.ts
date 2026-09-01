@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "node:fs";
 import path from "node:path";
 import { Readable } from "node:stream";
@@ -71,7 +71,6 @@ export async function fetchFileFromStorage(targetKey: string): Promise<FileStrea
   const bucketName = process.env.R2_BUCKET_NAME;
   const client = getR2Client();
 
-  // Clean targetKey (remove leading slash if present)
   const normalizedKey = targetKey.replace(/^\/+/, "");
 
   // 1. Try Cloudflare R2 if configured
@@ -116,7 +115,6 @@ export async function fetchFileFromStorage(targetKey: string): Promise<FileStrea
     const publicDir = path.join(process.cwd(), "public");
     const localFilePath = path.join(publicDir, normalizedKey);
 
-    // Prevent directory traversal
     const relative = path.relative(publicDir, localFilePath);
     if (relative.startsWith("..") || path.isAbsolute(relative)) {
       return null;
@@ -139,4 +137,49 @@ export async function fetchFileFromStorage(targetKey: string): Promise<FileStrea
   }
 
   return null;
+}
+
+export async function uploadFileToStorage(params: {
+  key: string;
+  buffer: Uint8Array | Buffer;
+  contentType?: string;
+}): Promise<{ success: boolean; source: "r2" | "local"; key: string }> {
+  const bucketName = process.env.R2_BUCKET_NAME;
+  const client = getR2Client();
+  const normalizedKey = params.key.replace(/^\/+/, "");
+  const mimeType = params.contentType || getMimeType(normalizedKey);
+
+  // 1. If Cloudflare R2 is configured, upload to R2
+  if (client && bucketName) {
+    try {
+      const command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: normalizedKey,
+        Body: params.buffer,
+        ContentType: mimeType,
+      });
+      await client.send(command);
+      return { success: true, source: "r2", key: normalizedKey };
+    } catch (err) {
+      console.error(`Failed to upload to R2 for key "${normalizedKey}":`, err);
+      // Fallback to local disk if R2 fails
+    }
+  }
+
+  // 2. Local disk fallback: save to public/
+  const publicDir = path.join(process.cwd(), "public");
+  const localFilePath = path.join(publicDir, normalizedKey);
+
+  const relative = path.relative(publicDir, localFilePath);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error("Invalid target file path");
+  }
+
+  const parentDir = path.dirname(localFilePath);
+  if (!fs.existsSync(parentDir)) {
+    fs.mkdirSync(parentDir, { recursive: true });
+  }
+
+  fs.writeFileSync(localFilePath, Buffer.from(params.buffer));
+  return { success: true, source: "local", key: normalizedKey };
 }

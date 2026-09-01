@@ -8,6 +8,7 @@ import {
   revokeToken,
   getAccessStats,
 } from "@/lib/db/queries";
+import { uploadFileToStorage, getMimeType } from "@/lib/storage/r2";
 
 export const runtime = "nodejs";
 
@@ -50,6 +51,56 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const contentType = request.headers.get("content-type") || "";
+
+    // Handle Multipart Form Data (File Upload)
+    if (contentType.includes("multipart/form-data")) {
+      if (!verifyAdminAuth(request)) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const formData = await request.formData();
+      const file = formData.get("file") as File | null;
+      if (!file) {
+        return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      }
+
+      const rawSlug = (formData.get("slug") as string)?.trim() || file.name;
+      // Normalize slug to lowercase without special chars
+      const slug = rawSlug.replace(/^\/+/, "");
+      const targetFolder = (formData.get("folder") as string)?.trim() || "uploads";
+      const targetKey = `${targetFolder}/${file.name}`;
+      const description = (formData.get("description") as string)?.trim() || `Uploaded ${file.name}`;
+      const isPublic = formData.get("is_public") === "true";
+
+      const fileBuffer = Buffer.from(await file.arrayBuffer());
+      const mime = file.type || getMimeType(file.name);
+
+      // Upload to R2 / local
+      const uploadResult = await uploadFileToStorage({
+        key: targetKey,
+        buffer: fileBuffer,
+        contentType: mime,
+      });
+
+      // Upsert record in database
+      const saved = await upsertFile({
+        slug,
+        target_key: uploadResult.key,
+        content_type: mime,
+        is_public: isPublic,
+        description,
+      });
+
+      return NextResponse.json({
+        success: true,
+        file: saved,
+        source: uploadResult.source,
+        message: `File uploaded to ${uploadResult.source.toUpperCase()} successfully`,
+      });
+    }
+
+    // Handle JSON Requests
     const body = await request.json();
     const { action } = body;
 
@@ -88,9 +139,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "slug and target_key are required" }, { status: 400 });
       }
       const saved = await upsertFile({
-        slug,
-        target_key,
-        content_type: content_type || "application/pdf",
+        slug: slug.replace(/^\/+/, ""),
+        target_key: target_key.replace(/^\/+/, ""),
+        content_type: content_type || getMimeType(target_key),
         is_public: is_public ?? true,
         cache_control,
         description,

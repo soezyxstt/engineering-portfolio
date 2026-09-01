@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { 
   FileText, 
   KeyRound, 
@@ -15,7 +15,10 @@ import {
   Eye, 
   Lock, 
   Unlock,
-  RefreshCw
+  RefreshCw,
+  UploadCloud,
+  FileUp,
+  X
 } from "lucide-react";
 
 interface FileRecord {
@@ -70,11 +73,21 @@ export default function AdminFilesPage() {
   const [loading, setLoading] = useState(false);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
 
-  // New file form
-  const [newFileSlug, setNewFileSlug] = useState("");
-  const [newFileTarget, setNewFileTarget] = useState("");
-  const [newFileDesc, setNewFileDesc] = useState("");
-  const [newFilePublic, setNewFilePublic] = useState(true);
+  // Upload state
+  const [uploadMode, setUploadMode] = useState<"upload" | "manual">("upload");
+  const [selectedUploadFile, setSelectedUploadFile] = useState<File | null>(null);
+  const [uploadSlug, setUploadSlug] = useState("");
+  const [uploadDesc, setUploadDesc] = useState("");
+  const [uploadPublic, setUploadPublic] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatusMsg, setUploadStatusMsg] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Manual Alias state
+  const [manualSlug, setManualSlug] = useState("");
+  const [manualTarget, setManualTarget] = useState("");
+  const [manualDesc, setManualDesc] = useState("");
+  const [manualPublic, setManualPublic] = useState(true);
 
   // New token form
   const [selectedFileSlug, setSelectedFileSlug] = useState("");
@@ -126,7 +139,7 @@ export default function AdminFilesPage() {
         setIsAuthenticated(true);
         fetchData();
       } else {
-        setLoginError("Invalid password. Check your ADMIN_PASSWORD setting.");
+        setLoginError("Invalid password. Check your ADMIN_PASSWORD setting in .env");
       }
     } catch (err: unknown) {
       const error = err as Error;
@@ -134,9 +147,57 @@ export default function AdminFilesPage() {
     }
   };
 
-  const handleUpsertFile = async (e: React.FormEvent) => {
+  const handleFileSelect = (file: File) => {
+    setSelectedUploadFile(file);
+    // Auto-generate clean slug from filename
+    const cleanName = file.name.toLowerCase().replace(/\s+/g, "-");
+    setUploadSlug(cleanName);
+    setUploadDesc(`Uploaded ${file.name}`);
+    setUploadStatusMsg(null);
+  };
+
+  const handleDirectUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newFileSlug || !newFileTarget) return;
+    if (!selectedUploadFile || !uploadSlug) return;
+
+    setIsUploading(true);
+    setUploadStatusMsg(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedUploadFile);
+      formData.append("slug", uploadSlug.trim());
+      formData.append("description", uploadDesc.trim());
+      formData.append("is_public", uploadPublic ? "true" : "false");
+
+      const res = await fetch("/api/admin/files", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUploadStatusMsg(`✅ ${data.message || "File uploaded successfully!"}`);
+        setSelectedUploadFile(null);
+        setUploadSlug("");
+        setUploadDesc("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        fetchData();
+      } else {
+        const errData = await res.json();
+        setUploadStatusMsg(`❌ Upload failed: ${errData.error || "Server error"}`);
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setUploadStatusMsg(`❌ Upload failed: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleManualUpsert = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualSlug || !manualTarget) return;
 
     try {
       const res = await fetch("/api/admin/files", {
@@ -144,16 +205,16 @@ export default function AdminFilesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "upsert_file",
-          slug: newFileSlug.trim(),
-          target_key: newFileTarget.trim(),
-          is_public: newFilePublic,
-          description: newFileDesc.trim(),
+          slug: manualSlug.trim(),
+          target_key: manualTarget.trim(),
+          is_public: manualPublic,
+          description: manualDesc.trim(),
         }),
       });
       if (res.ok) {
-        setNewFileSlug("");
-        setNewFileTarget("");
-        setNewFileDesc("");
+        setManualSlug("");
+        setManualTarget("");
+        setManualDesc("");
         fetchData();
       }
     } catch (err) {
@@ -245,7 +306,7 @@ export default function AdminFilesPage() {
             </p>
             <h1 className="text-2xl font-serif text-[var(--ink)]">Personal File Manager</h1>
             <p className="text-sm text-[var(--ink-soft)] mt-1">
-              Enter your admin passphrase to manage file routes, access tokens, and view analytics.
+              Enter your admin passphrase to upload files, configure aliases, and generate shareable links.
             </p>
           </div>
 
@@ -293,7 +354,7 @@ export default function AdminFilesPage() {
           </p>
           <h1 className="text-3xl md:text-4xl font-serif">File Server Manager</h1>
           <p className="text-sm text-[var(--ink-soft)] mt-1">
-            Cloudflare R2 storage routing, dynamic aliases, revocable recruiter tokens, and access telemetry.
+            Direct file uploads, Cloudflare R2 routing, dynamic aliases, recruiter tokens, and access telemetry.
           </p>
         </div>
 
@@ -324,7 +385,7 @@ export default function AdminFilesPage() {
               : "border-transparent text-[var(--ink-soft)] hover:text-[var(--ink)]"
           }`}
         >
-          <FileText className="w-4 h-4" /> File Aliases ({files.length})
+          <FileText className="w-4 h-4" /> Files & Uploads ({files.length})
         </button>
         <button
           onClick={() => setActiveTab("tokens")}
@@ -348,72 +409,227 @@ export default function AdminFilesPage() {
         </button>
       </div>
 
-      {/* TAB 1: FILE ALIASES */}
+      {/* TAB 1: FILES & UPLOAD */}
       {activeTab === "files" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-[var(--white)] border border-[var(--line)] p-6 self-start">
-            <h2 className="text-lg font-serif mb-4 flex items-center gap-2">
-              <Plus className="w-4 h-4 text-[var(--cobalt)]" /> Register / Edit File Alias
-            </h2>
-            <form onSubmit={handleUpsertFile} className="space-y-4 text-xs font-mono">
-              <div>
-                <label className="block text-[var(--ink-soft)] mb-1 uppercase">Slug / Public Path</label>
-                <input
-                  type="text"
-                  value={newFileSlug}
-                  onChange={(e) => setNewFileSlug(e.target.value)}
-                  placeholder="e.g. resume.pdf or project-spec.pdf"
-                  className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
-                  required
-                />
-                <p className="text-[10px] text-[var(--ink-soft)] mt-1">Accessible via /f/[slug]</p>
+          {/* Left Column: Upload / Add Form */}
+          <div className="bg-[var(--white)] border border-[var(--line)] p-6 self-start space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
+              <span className="text-sm font-serif font-semibold">Add / Upload File</span>
+              <div className="flex bg-[var(--paper)] p-0.5 rounded text-[11px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => setUploadMode("upload")}
+                  className={`px-2.5 py-1 rounded transition-colors ${
+                    uploadMode === "upload" ? "bg-white text-[var(--cobalt)] shadow-xs font-bold" : "text-[var(--ink-soft)]"
+                  }`}
+                >
+                  Direct Upload
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUploadMode("manual")}
+                  className={`px-2.5 py-1 rounded transition-colors ${
+                    uploadMode === "manual" ? "bg-white text-[var(--cobalt)] shadow-xs font-bold" : "text-[var(--ink-soft)]"
+                  }`}
+                >
+                  Manual Alias
+                </button>
               </div>
+            </div>
 
-              <div>
-                <label className="block text-[var(--ink-soft)] mb-1 uppercase">Target Key in R2 / Local</label>
-                <input
-                  type="text"
-                  value={newFileTarget}
-                  onChange={(e) => setNewFileTarget(e.target.value)}
-                  placeholder="e.g. resume/Software-Engineer.pdf"
-                  className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
-                  required
-                />
-              </div>
+            {/* DIRECT UPLOAD FORM */}
+            {uploadMode === "upload" ? (
+              <form onSubmit={handleDirectUpload} className="space-y-4 text-xs font-mono">
+                {/* Drag and Drop Zone */}
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                      handleFileSelect(e.dataTransfer.files[0]);
+                    }
+                  }}
+                  className={`border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
+                    selectedUploadFile
+                      ? "border-emerald-500 bg-emerald-50/40"
+                      : "border-[var(--line-strong)] hover:border-[var(--cobalt)] bg-[var(--paper)]"
+                  }`}
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFileSelect(e.target.files[0]);
+                      }
+                    }}
+                    className="hidden"
+                  />
+                  {selectedUploadFile ? (
+                    <div className="space-y-1">
+                      <FileUp className="w-6 h-6 mx-auto text-emerald-600 mb-1" />
+                      <p className="font-bold text-[var(--ink)] truncate max-w-xs mx-auto">
+                        {selectedUploadFile.name}
+                      </p>
+                      <p className="text-[10px] text-[var(--ink-soft)]">
+                        {(selectedUploadFile.size / 1024).toFixed(1)} KB · Click to replace
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1 text-[var(--ink-soft)]">
+                      <UploadCloud className="w-7 h-7 mx-auto text-[var(--cobalt)] mb-1" />
+                      <p className="font-semibold text-[var(--ink)]">Drag & drop your file here</p>
+                      <p className="text-[10px]">or click to browse from computer (PDF, images, media)</p>
+                    </div>
+                  )}
+                </div>
 
-              <div>
-                <label className="block text-[var(--ink-soft)] mb-1 uppercase">Description</label>
-                <input
-                  type="text"
-                  value={newFileDesc}
-                  onChange={(e) => setNewFileDesc(e.target.value)}
-                  placeholder="Brief note or version label"
-                  className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
-                />
-              </div>
+                {selectedUploadFile && (
+                  <>
+                    <div>
+                      <label className="block text-[var(--ink-soft)] mb-1 uppercase">
+                        Public URL Slug (Field 1)
+                      </label>
+                      <div className="flex items-center">
+                        <span className="px-2 py-2 bg-[var(--paper)] border border-r-0 border-[var(--line)] text-[var(--ink-soft)]">
+                          /f/
+                        </span>
+                        <input
+                          type="text"
+                          value={uploadSlug}
+                          onChange={(e) => setUploadSlug(e.target.value)}
+                          placeholder="e.g. resume.pdf"
+                          className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                          required
+                        />
+                      </div>
+                      <p className="text-[10px] text-[var(--ink-soft)] mt-1">
+                        URL bersih yang akan dibagikan ke recruiter / publik.
+                      </p>
+                    </div>
 
-              <div className="flex items-center gap-2 pt-2">
-                <input
-                  type="checkbox"
-                  id="is_public"
-                  checked={newFilePublic}
-                  onChange={(e) => setNewFilePublic(e.target.checked)}
-                  className="rounded border-[var(--line)] text-[var(--cobalt)] focus:ring-[var(--cobalt)]"
-                />
-                <label htmlFor="is_public" className="cursor-pointer text-[var(--ink)]">
-                  Public file (direct /f/ access)
-                </label>
-              </div>
+                    <div>
+                      <label className="block text-[var(--ink-soft)] mb-1 uppercase">Description / Note</label>
+                      <input
+                        type="text"
+                        value={uploadDesc}
+                        onChange={(e) => setUploadDesc(e.target.value)}
+                        placeholder="e.g. Latest Software Engineer Résumé"
+                        className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                      />
+                    </div>
 
-              <button
-                type="submit"
-                className="w-full py-2 bg-[var(--ink)] text-white text-xs uppercase tracking-wider hover:bg-[var(--cobalt)] transition-colors mt-2"
-              >
-                Save File Route
-              </button>
-            </form>
+                    <div className="flex items-center gap-2 pt-1">
+                      <input
+                        type="checkbox"
+                        id="upload_public"
+                        checked={uploadPublic}
+                        onChange={(e) => setUploadPublic(e.target.checked)}
+                        className="rounded border-[var(--line)] text-[var(--cobalt)] focus:ring-[var(--cobalt)]"
+                      />
+                      <label htmlFor="upload_public" className="cursor-pointer text-[var(--ink)]">
+                        Public file (direct /f/ access)
+                      </label>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isUploading}
+                      className="w-full py-2.5 bg-[var(--cobalt)] text-white text-xs font-mono uppercase tracking-wider hover:bg-[var(--ink)] transition-colors flex items-center justify-center gap-2"
+                    >
+                      {isUploading ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Uploading to Storage...
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="w-3.5 h-3.5" /> Upload & Save File
+                        </>
+                      )}
+                    </button>
+                  </>
+                )}
+
+                {uploadStatusMsg && (
+                  <div className="p-3 bg-[var(--paper)] border border-[var(--line)] text-[11px] font-mono">
+                    {uploadStatusMsg}
+                  </div>
+                )}
+              </form>
+            ) : (
+              /* MANUAL ALIAS FORM */
+              <form onSubmit={handleManualUpsert} className="space-y-4 text-xs font-mono">
+                <div>
+                  <label className="block text-[var(--ink-soft)] mb-1 uppercase">Public URL Slug</label>
+                  <div className="flex items-center">
+                    <span className="px-2 py-2 bg-[var(--paper)] border border-r-0 border-[var(--line)] text-[var(--ink-soft)]">
+                      /f/
+                    </span>
+                    <input
+                      type="text"
+                      value={manualSlug}
+                      onChange={(e) => setManualSlug(e.target.value)}
+                      placeholder="e.g. resume.pdf"
+                      className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[var(--ink-soft)] mb-1 uppercase">
+                    Target File Name in R2 / Local
+                  </label>
+                  <input
+                    type="text"
+                    value={manualTarget}
+                    onChange={(e) => setManualTarget(e.target.value)}
+                    placeholder="e.g. resume/Software-Engineer-EN.pdf"
+                    className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                    required
+                  />
+                  <p className="text-[10px] text-[var(--ink-soft)] mt-1">
+                    Nama file asli yang ada di folder public/ atau bucket Cloudflare R2.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-[var(--ink-soft)] mb-1 uppercase">Description</label>
+                  <input
+                    type="text"
+                    value={manualDesc}
+                    onChange={(e) => setManualDesc(e.target.value)}
+                    placeholder="Brief version note"
+                    className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="checkbox"
+                    id="manual_public"
+                    checked={manualPublic}
+                    onChange={(e) => setManualPublic(e.target.checked)}
+                    className="rounded border-[var(--line)] text-[var(--cobalt)] focus:ring-[var(--cobalt)]"
+                  />
+                  <label htmlFor="manual_public" className="cursor-pointer text-[var(--ink)]">
+                    Public file (direct /f/ access)
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-[var(--ink)] text-white text-xs uppercase tracking-wider hover:bg-[var(--cobalt)] transition-colors mt-2"
+                >
+                  Save Alias Route
+                </button>
+              </form>
+            )}
           </div>
 
+          {/* Right Column: Files List Table */}
           <div className="lg:col-span-2 space-y-4">
             <div className="bg-[var(--white)] border border-[var(--line)] overflow-hidden">
               <div className="overflow-x-auto">
@@ -421,7 +637,7 @@ export default function AdminFilesPage() {
                   <thead className="bg-[var(--paper-deep)] border-b border-[var(--line)] text-[var(--ink-soft)] uppercase">
                     <tr>
                       <th className="p-3">Route / Alias</th>
-                      <th className="p-3">Target Object</th>
+                      <th className="p-3">Target Object Key</th>
                       <th className="p-3">Type</th>
                       <th className="p-3">Actions</th>
                     </tr>
