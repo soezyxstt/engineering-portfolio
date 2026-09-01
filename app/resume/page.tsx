@@ -14,26 +14,24 @@ const resumeVariants = [
     label: "Software Engineer",
     note: "Recommended for global software, full-stack, backend, and AI-product roles.",
     featured: true,
-    english: "/resume/Adi-Haditya-Nursyam-Software-Engineer-Resume-EN.pdf",
-    indonesian: "/resume/Adi-Haditya-Nursyam-Software-Engineer-Resume-ID.pdf",
+    english: "/f/resume.pdf",
+    indonesian: "/f/resume-id.pdf",
   },
   {
     label: "Automation Engineer",
     note: "For controls, robotics, embedded systems, and industrial digitalization.",
-    english: "/resume/Adi-Haditya-Nursyam-Automation-Engineer-Resume-EN.pdf",
-    indonesian: "/resume/Adi-Haditya-Nursyam-Automation-Engineer-Resume-ID.pdf",
+    english: "/f/automation-resume.pdf",
+    indonesian: "/f/automation-resume-id.pdf",
   },
   {
     label: "Mechanical Engineer",
     note: "For mechanical design, analysis, reliability, and engineering roles.",
-    english: "/resume/Adi-Haditya-Nursyam-Mechanical-Engineer-Resume-EN.pdf",
-    indonesian: "/resume/Adi-Haditya-Nursyam-Mechanical-Engineer-Resume-ID.pdf",
+    english: "/f/mechanical-resume.pdf",
+    indonesian: "/f/mechanical-resume-id.pdf",
   },
   {
     label: "General Master",
     note: "A broad profile spanning software, engineering, leadership, and product ownership.",
-    english: "/resume/Adi-Haditya-Nursyam-General-Master-Resume-EN.pdf",
-    indonesian: "/resume/Adi-Haditya-Nursyam-General-Master-Resume-ID.pdf",
   },
 ];
 
