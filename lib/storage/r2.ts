@@ -110,7 +110,12 @@ export async function fetchFileFromStorage(targetKey: string): Promise<FileStrea
     }
   }
 
-  // 2. Fallback to local public/ directory
+  // 2. Fallback to local disk (primarily for local dev and resume PDFs)
+  // Skip broad disk traversal in production if R2 is configured
+  if (process.env.NODE_ENV === "production" && isR2Configured()) {
+    return null;
+  }
+
   try {
     const publicDir = path.join(process.cwd(), "public");
     const localFilePath = path.join(publicDir, normalizedKey);
@@ -162,7 +167,6 @@ export async function uploadFileToStorage(params: {
       return { success: true, source: "r2", key: normalizedKey };
     } catch (err) {
       console.error(`Failed to upload to R2 for key "${normalizedKey}":`, err);
-      // Fallback to local disk if R2 fails
     }
   }
 
