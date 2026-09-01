@@ -128,10 +128,9 @@ export async function deleteR2Object(key: string): Promise<boolean> {
 export async function fetchFileFromStorage(targetKey: string): Promise<FileStreamResult | null> {
   const bucketName = process.env.R2_BUCKET_NAME;
   const client = getR2Client();
-
   const normalizedKey = targetKey.replace(/^\/+/, "");
 
-  // 1. Try Cloudflare R2 if configured
+  // 1. Cloudflare R2 Storage (Primary & Exclusive when configured)
   if (client && bucketName) {
     try {
       const command = new GetObjectCommand({
@@ -165,15 +164,17 @@ export async function fetchFileFromStorage(targetKey: string): Promise<FileStrea
       if (error.name !== "NoSuchKey" && error.name !== "NotFound") {
         console.warn(`R2 fetch warning for key "${normalizedKey}":`, error.message);
       }
+      // When R2 is configured, do not fall back to local disk
+      return null;
     }
   }
 
-  // 2. Fallback to local disk (primarily for local dev and resume PDFs)
-  // Skip broad disk traversal in production if R2 is configured
-  if (process.env.NODE_ENV === "production" && isR2Configured()) {
+  // 2. Strict check: If R2 is configured, NEVER read from public/ to avoid conflicts
+  if (isR2Configured()) {
     return null;
   }
 
+  // 3. Fallback to local disk ONLY for development environments where R2 credentials are not set
   try {
     const publicDir = path.join(process.cwd(), "public");
     const localFilePath = path.join(publicDir, normalizedKey);
@@ -212,23 +213,19 @@ export async function uploadFileToStorage(params: {
   const normalizedKey = params.key.replace(/^\/+/, "");
   const mimeType = params.contentType || getMimeType(normalizedKey);
 
-  // 1. If Cloudflare R2 is configured, upload to R2
+  // 1. If Cloudflare R2 is configured, upload strictly to R2
   if (client && bucketName) {
-    try {
-      const command = new PutObjectCommand({
-        Bucket: bucketName,
-        Key: normalizedKey,
-        Body: params.buffer,
-        ContentType: mimeType,
-      });
-      await client.send(command);
-      return { success: true, source: "r2", key: normalizedKey };
-    } catch (err) {
-      console.error(`Failed to upload to R2 for key "${normalizedKey}":`, err);
-    }
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: normalizedKey,
+      Body: params.buffer,
+      ContentType: mimeType,
+    });
+    await client.send(command);
+    return { success: true, source: "r2", key: normalizedKey };
   }
 
-  // 2. Local disk fallback: save to public/
+  // 2. If R2 is not configured and in dev mode, fallback to public/
   const publicDir = path.join(process.cwd(), "public");
   const localFilePath = path.join(publicDir, normalizedKey);
 
