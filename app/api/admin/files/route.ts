@@ -8,7 +8,13 @@ import {
   revokeToken,
   getAccessStats,
 } from "@/lib/db/queries";
-import { uploadFileToStorage, getMimeType } from "@/lib/storage/r2";
+import { 
+  uploadFileToStorage, 
+  getMimeType, 
+  listR2Objects, 
+  deleteR2Object, 
+  isR2Configured 
+} from "@/lib/storage/r2";
 
 export const runtime = "nodejs";
 
@@ -32,16 +38,20 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const [files, tokens, stats] = await Promise.all([
+    const [files, tokens, stats, r2Objects] = await Promise.all([
       getAllFiles(),
       getAllTokens(),
       getAccessStats(),
+      listR2Objects(),
     ]);
 
     return NextResponse.json({
       files,
       tokens,
       stats,
+      r2Objects,
+      r2Configured: isR2Configured(),
+      bucketName: process.env.R2_BUCKET_NAME || null,
     });
   } catch (error: unknown) {
     const err = error as Error;
@@ -156,6 +166,54 @@ export async function POST(request: NextRequest) {
       }
       const deleted = await deleteFileBySlug(slug);
       return NextResponse.json({ success: deleted });
+    }
+
+    if (action === "delete_r2_object") {
+      const { key } = body;
+      if (!key) {
+        return NextResponse.json({ error: "key is required" }, { status: 400 });
+      }
+      const deleted = await deleteR2Object(key);
+      return NextResponse.json({ success: deleted });
+    }
+
+    if (action === "sync_r2_to_db") {
+      const r2Objects = await listR2Objects();
+      const existingFiles = await getAllFiles();
+      const existingKeys = new Set(existingFiles.map((f) => f.target_key));
+      const existingSlugs = new Set(existingFiles.map((f) => f.slug));
+
+      let addedCount = 0;
+      for (const obj of r2Objects) {
+        if (!existingKeys.has(obj.key)) {
+          // Generate a clean unique slug based on filename
+          const filename = obj.key.split("/").pop() || obj.key;
+          let candidateSlug = filename.toLowerCase().replace(/\s+/g, "-");
+          let counter = 1;
+          while (existingSlugs.has(candidateSlug)) {
+            const ext = candidateSlug.includes(".") ? "." + candidateSlug.split(".").pop() : "";
+            const base = candidateSlug.replace(new RegExp(`\\${ext}$`), "");
+            candidateSlug = `${base}-${counter}${ext}`;
+            counter++;
+          }
+
+          existingSlugs.add(candidateSlug);
+          await upsertFile({
+            slug: candidateSlug,
+            target_key: obj.key,
+            content_type: obj.contentType,
+            is_public: true,
+            description: `Imported from R2: ${obj.key}`,
+          });
+          addedCount++;
+        }
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: `Synced ${addedCount} new object(s) from Cloudflare R2 to database.`,
+        syncedCount: addedCount,
+      });
     }
 
     if (action === "create_token") {

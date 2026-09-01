@@ -1,4 +1,10 @@
-import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { 
+  S3Client, 
+  GetObjectCommand, 
+  PutObjectCommand, 
+  ListObjectsV2Command, 
+  DeleteObjectCommand 
+} from "@aws-sdk/client-s3";
 import fs from "node:fs";
 import path from "node:path";
 import { Readable } from "node:stream";
@@ -8,7 +14,7 @@ let s3Client: S3Client | null = null;
 export function getR2Client(): S3Client | null {
   if (s3Client) return s3Client;
 
-  const accountId = process.env.R2_ACCOUNT_ID;
+  const accountId = process.env.R2_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 
@@ -27,8 +33,9 @@ export function getR2Client(): S3Client | null {
 }
 
 export function isR2Configured(): boolean {
+  const accountId = process.env.R2_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID;
   return Boolean(
-    process.env.R2_ACCOUNT_ID &&
+    accountId &&
     process.env.R2_ACCESS_KEY_ID &&
     process.env.R2_SECRET_ACCESS_KEY &&
     process.env.R2_BUCKET_NAME
@@ -65,6 +72,57 @@ export interface FileStreamResult {
   etag?: string;
   lastModified?: string;
   source: "r2" | "local";
+}
+
+export interface R2ObjectInfo {
+  key: string;
+  size: number;
+  lastModified?: string;
+  contentType: string;
+}
+
+export async function listR2Objects(): Promise<R2ObjectInfo[]> {
+  const bucketName = process.env.R2_BUCKET_NAME;
+  const client = getR2Client();
+  if (!client || !bucketName) return [];
+
+  try {
+    const command = new ListObjectsV2Command({
+      Bucket: bucketName,
+    });
+    const res = await client.send(command);
+    const contents = res.Contents || [];
+
+    return contents
+      .filter((obj) => obj.Key && !obj.Key.endsWith("/")) // exclude directory marker entries
+      .map((obj) => ({
+        key: obj.Key!,
+        size: obj.Size || 0,
+        lastModified: obj.LastModified ? obj.LastModified.toISOString() : undefined,
+        contentType: getMimeType(obj.Key!),
+      }));
+  } catch (err) {
+    console.error("Failed to list R2 objects:", err);
+    return [];
+  }
+}
+
+export async function deleteR2Object(key: string): Promise<boolean> {
+  const bucketName = process.env.R2_BUCKET_NAME;
+  const client = getR2Client();
+  if (!client || !bucketName) return false;
+
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: key.replace(/^\/+/, ""),
+    });
+    await client.send(command);
+    return true;
+  } catch (err) {
+    console.error(`Failed to delete R2 object "${key}":`, err);
+    return false;
+  }
 }
 
 export async function fetchFileFromStorage(targetKey: string): Promise<FileStreamResult | null> {

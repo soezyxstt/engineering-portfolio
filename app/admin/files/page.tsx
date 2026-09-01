@@ -5,7 +5,6 @@ import {
   FileText, 
   KeyRound, 
   BarChart3, 
-  Plus, 
   Trash2, 
   Copy, 
   Check, 
@@ -18,7 +17,10 @@ import {
   RefreshCw,
   UploadCloud,
   FileUp,
-  X
+  HardDrive,
+  FolderSync,
+  PlusCircle,
+  Database
 } from "lucide-react";
 
 interface FileRecord {
@@ -31,6 +33,13 @@ interface FileRecord {
   description: string | null;
   created_at: string;
   updated_at: string;
+}
+
+interface R2ObjectInfo {
+  key: string;
+  size: number;
+  lastModified?: string;
+  contentType: string;
 }
 
 interface FileAccessToken {
@@ -61,22 +70,36 @@ interface AccessStats {
   recentLogs: FileAccessLog[];
 }
 
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
+
 export default function AdminFilesPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [activeTab, setActiveTab] = useState<"files" | "tokens" | "analytics">("files");
+  const [activeTab, setActiveTab] = useState<"files" | "r2" | "tokens" | "analytics">("files");
 
   const [files, setFiles] = useState<FileRecord[]>([]);
+  const [r2Objects, setR2Objects] = useState<R2ObjectInfo[]>([]);
+  const [r2Configured, setR2Configured] = useState<boolean>(false);
+  const [bucketName, setBucketName] = useState<string | null>(null);
   const [tokens, setTokens] = useState<FileAccessToken[]>([]);
   const [stats, setStats] = useState<AccessStats | null>(null);
   const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
 
   // Upload state
   const [uploadMode, setUploadMode] = useState<"upload" | "manual">("upload");
   const [selectedUploadFile, setSelectedUploadFile] = useState<File | null>(null);
   const [uploadSlug, setUploadSlug] = useState("");
+  const [uploadFolder, setUploadFolder] = useState("resume");
   const [uploadDesc, setUploadDesc] = useState("");
   const [uploadPublic, setUploadPublic] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -108,6 +131,9 @@ export default function AdminFilesPage() {
       if (res.ok) {
         const data = await res.json();
         setFiles(data.files || []);
+        setR2Objects(data.r2Objects || []);
+        setR2Configured(Boolean(data.r2Configured));
+        setBucketName(data.bucketName || null);
         setTokens(data.tokens || []);
         setStats(data.stats || null);
         setIsAuthenticated(true);
@@ -149,7 +175,6 @@ export default function AdminFilesPage() {
 
   const handleFileSelect = (file: File) => {
     setSelectedUploadFile(file);
-    // Auto-generate clean slug from filename
     const cleanName = file.name.toLowerCase().replace(/\s+/g, "-");
     setUploadSlug(cleanName);
     setUploadDesc(`Uploaded ${file.name}`);
@@ -167,6 +192,7 @@ export default function AdminFilesPage() {
       const formData = new FormData();
       formData.append("file", selectedUploadFile);
       formData.append("slug", uploadSlug.trim());
+      formData.append("folder", uploadFolder.trim() || "uploads");
       formData.append("description", uploadDesc.trim());
       formData.append("is_public", uploadPublic ? "true" : "false");
 
@@ -222,8 +248,33 @@ export default function AdminFilesPage() {
     }
   };
 
+  const handleSyncR2 = async () => {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const res = await fetch("/api/admin/files", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "sync_r2_to_db" }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSyncMsg(`✅ ${data.message}`);
+        fetchData();
+      } else {
+        const errData = await res.json();
+        setSyncMsg(`❌ Sync error: ${errData.error}`);
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setSyncMsg(`❌ Sync error: ${error.message}`);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const handleDeleteFile = async (slug: string) => {
-    if (!confirm(`Are you sure you want to delete alias "${slug}"?`)) return;
+    if (!confirm(`Are you sure you want to delete alias route "/f/${slug}"?`)) return;
     try {
       const res = await fetch("/api/admin/files", {
         method: "POST",
@@ -234,6 +285,31 @@ export default function AdminFilesPage() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleDeleteR2Object = async (key: string) => {
+    if (!confirm(`⚠️ Permanently delete "${key}" from Cloudflare R2 bucket?`)) return;
+    try {
+      const res = await fetch("/api/admin/files", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "delete_r2_object", key }),
+      });
+      if (res.ok) fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleQuickCreateRoute = (obj: R2ObjectInfo) => {
+    const filename = obj.key.split("/").pop() || obj.key;
+    const cleanSlug = filename.toLowerCase().replace(/\s+/g, "-");
+    setManualSlug(cleanSlug);
+    setManualTarget(obj.key);
+    setManualDesc(`Route for ${filename}`);
+    setManualPublic(true);
+    setActiveTab("files");
+    setUploadMode("manual");
   };
 
   const handleCreateToken = async (e: React.FormEvent) => {
@@ -306,7 +382,7 @@ export default function AdminFilesPage() {
             </p>
             <h1 className="text-2xl font-serif text-[var(--ink)]">Personal File Manager</h1>
             <p className="text-sm text-[var(--ink-soft)] mt-1">
-              Enter your admin passphrase to upload files, configure aliases, and generate shareable links.
+              Enter your admin passphrase to manage Cloudflare R2 storage, D1 database aliases, and signed recruiter tokens.
             </p>
           </div>
 
@@ -344,17 +420,30 @@ export default function AdminFilesPage() {
     );
   }
 
+  const linkedKeys = new Set(files.map((f) => f.target_key));
+
   return (
     <main className="min-h-screen p-6 md:p-12 max-w-7xl mx-auto text-[var(--ink)]">
       {/* Header */}
       <header className="mb-10 pb-6 border-b border-[var(--line)] flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="kicker mb-1 font-mono text-xs uppercase tracking-widest text-[var(--cobalt)]">
-            Infrastructure & Control
-          </p>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="kicker font-mono text-xs uppercase tracking-widest text-[var(--cobalt)]">
+              Infrastructure & Control
+            </p>
+            {r2Configured ? (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                <HardDrive className="w-3 h-3" /> Cloudflare R2 ({bucketName || "Connected"})
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 flex items-center gap-1">
+                <Database className="w-3 h-3" /> Local Storage Mode
+              </span>
+            )}
+          </div>
           <h1 className="text-3xl md:text-4xl font-serif">File Server Manager</h1>
           <p className="text-sm text-[var(--ink-soft)] mt-1">
-            Direct file uploads, Cloudflare R2 routing, dynamic aliases, recruiter tokens, and access telemetry.
+            Cloudflare R2 Bucket Objects, D1 routing aliases, recruiter tokens, and access telemetry.
           </p>
         </div>
 
@@ -385,7 +474,17 @@ export default function AdminFilesPage() {
               : "border-transparent text-[var(--ink-soft)] hover:text-[var(--ink)]"
           }`}
         >
-          <FileText className="w-4 h-4" /> Files & Uploads ({files.length})
+          <FileText className="w-4 h-4" /> Routes & Aliases ({files.length})
+        </button>
+        <button
+          onClick={() => setActiveTab("r2")}
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-mono border-b-2 transition-colors ${
+            activeTab === "r2"
+              ? "border-[var(--cobalt)] text-[var(--cobalt)] font-semibold bg-[var(--white)]"
+              : "border-transparent text-[var(--ink-soft)] hover:text-[var(--ink)]"
+          }`}
+        >
+          <HardDrive className="w-4 h-4" /> Cloudflare R2 Bucket ({r2Objects.length})
         </button>
         <button
           onClick={() => setActiveTab("tokens")}
@@ -409,13 +508,13 @@ export default function AdminFilesPage() {
         </button>
       </div>
 
-      {/* TAB 1: FILES & UPLOAD */}
+      {/* TAB 1: ROUTES & ALIASES */}
       {activeTab === "files" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Upload / Add Form */}
           <div className="bg-[var(--white)] border border-[var(--line)] p-6 self-start space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
-              <span className="text-sm font-serif font-semibold">Add / Upload File</span>
+              <span className="text-sm font-serif font-semibold">Upload / Add Route</span>
               <div className="flex bg-[var(--paper)] p-0.5 rounded text-[11px] font-mono">
                 <button
                   type="button"
@@ -474,7 +573,7 @@ export default function AdminFilesPage() {
                         {selectedUploadFile.name}
                       </p>
                       <p className="text-[10px] text-[var(--ink-soft)]">
-                        {(selectedUploadFile.size / 1024).toFixed(1)} KB · Click to replace
+                        {formatBytes(selectedUploadFile.size)} · Click to replace
                       </p>
                     </div>
                   ) : (
@@ -490,7 +589,7 @@ export default function AdminFilesPage() {
                   <>
                     <div>
                       <label className="block text-[var(--ink-soft)] mb-1 uppercase">
-                        Public URL Slug (Field 1)
+                        Public URL Slug (/f/...)
                       </label>
                       <div className="flex items-center">
                         <span className="px-2 py-2 bg-[var(--paper)] border border-r-0 border-[var(--line)] text-[var(--ink-soft)]">
@@ -505,9 +604,20 @@ export default function AdminFilesPage() {
                           required
                         />
                       </div>
-                      <p className="text-[10px] text-[var(--ink-soft)] mt-1">
-                        URL bersih yang akan dibagikan ke recruiter / publik.
-                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-[var(--ink-soft)] mb-1 uppercase">
+                        R2 Storage Folder
+                      </label>
+                      <input
+                        type="text"
+                        value={uploadFolder}
+                        onChange={(e) => setUploadFolder(e.target.value)}
+                        placeholder="e.g. resume or uploads"
+                        className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                        required
+                      />
                     </div>
 
                     <div>
@@ -541,11 +651,11 @@ export default function AdminFilesPage() {
                     >
                       {isUploading ? (
                         <>
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Uploading to Storage...
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Uploading to Cloudflare R2...
                         </>
                       ) : (
                         <>
-                          <UploadCloud className="w-3.5 h-3.5" /> Upload & Save File
+                          <UploadCloud className="w-3.5 h-3.5" /> Upload to R2 & Save Route
                         </>
                       )}
                     </button>
@@ -571,7 +681,7 @@ export default function AdminFilesPage() {
                       type="text"
                       value={manualSlug}
                       onChange={(e) => setManualSlug(e.target.value)}
-                      placeholder="e.g. resume.pdf"
+                      placeholder="e.g. laravel-resume.pdf"
                       className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
                       required
                     />
@@ -579,20 +689,56 @@ export default function AdminFilesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[var(--ink-soft)] mb-1 uppercase">
-                    Target File Name in R2 / Local
-                  </label>
-                  <input
-                    type="text"
-                    value={manualTarget}
-                    onChange={(e) => setManualTarget(e.target.value)}
-                    placeholder="e.g. resume/Software-Engineer-EN.pdf"
-                    className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
-                    required
-                  />
-                  <p className="text-[10px] text-[var(--ink-soft)] mt-1">
-                    Nama file asli yang ada di folder public/ atau bucket Cloudflare R2.
-                  </p>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[var(--ink-soft)] uppercase">
+                      Target R2 Object Key
+                    </label>
+                    {r2Objects.length > 0 && (
+                      <span className="text-[10px] text-[var(--cobalt)]">
+                        {r2Objects.length} in R2
+                      </span>
+                    )}
+                  </div>
+                  
+                  {r2Objects.length > 0 ? (
+                    <div className="space-y-1.5">
+                      <select
+                        value={manualTarget}
+                        onChange={(e) => {
+                          setManualTarget(e.target.value);
+                          if (!manualSlug && e.target.value) {
+                            const fname = e.target.value.split("/").pop() || "";
+                            setManualSlug(fname.toLowerCase().replace(/\s+/g, "-"));
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                      >
+                        <option value="">-- Select from R2 Bucket --</option>
+                        {r2Objects.map((obj) => (
+                          <option key={obj.key} value={obj.key}>
+                            {obj.key} ({formatBytes(obj.size)})
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="text"
+                        value={manualTarget}
+                        onChange={(e) => setManualTarget(e.target.value)}
+                        placeholder="or type manual key (e.g. resume/my-file.pdf)"
+                        className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                        required
+                      />
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      value={manualTarget}
+                      onChange={(e) => setManualTarget(e.target.value)}
+                      placeholder="e.g. resume/Software-Engineer-EN.pdf"
+                      className="w-full px-3 py-2 border border-[var(--line)] bg-white text-[var(--ink)] focus:outline-none focus:border-[var(--cobalt)]"
+                      required
+                    />
+                  )}
                 </div>
 
                 <div>
@@ -623,7 +769,7 @@ export default function AdminFilesPage() {
                   type="submit"
                   className="w-full py-2 bg-[var(--ink)] text-white text-xs uppercase tracking-wider hover:bg-[var(--cobalt)] transition-colors mt-2"
                 >
-                  Save Alias Route
+                  Save Route in D1
                 </button>
               </form>
             )}
@@ -631,14 +777,33 @@ export default function AdminFilesPage() {
 
           {/* Right Column: Files List Table */}
           <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono uppercase text-[var(--ink-soft)]">
+                Active Public & Private Routes ({files.length})
+              </span>
+              <button
+                onClick={handleSyncR2}
+                disabled={syncing || r2Objects.length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--cobalt)] text-white text-xs font-mono hover:bg-[var(--ink)] transition-colors disabled:opacity-50"
+              >
+                <FolderSync className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} /> Sync All R2 Files to DB
+              </button>
+            </div>
+
+            {syncMsg && (
+              <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-mono">
+                {syncMsg}
+              </div>
+            )}
+
             <div className="bg-[var(--white)] border border-[var(--line)] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead className="bg-[var(--paper-deep)] border-b border-[var(--line)] text-[var(--ink-soft)] uppercase">
                     <tr>
-                      <th className="p-3">Route / Alias</th>
-                      <th className="p-3">Target Object Key</th>
-                      <th className="p-3">Type</th>
+                      <th className="p-3">Route / Slug</th>
+                      <th className="p-3">Target R2 Object</th>
+                      <th className="p-3">Access</th>
                       <th className="p-3">Actions</th>
                     </tr>
                   </thead>
@@ -668,7 +833,9 @@ export default function AdminFilesPage() {
                             </p>
                           )}
                         </td>
-                        <td className="p-3 text-[var(--ink-soft)] break-all">{file.target_key}</td>
+                        <td className="p-3 text-[var(--ink-soft)] break-all">
+                          <span className="font-mono">{file.target_key}</span>
+                        </td>
                         <td className="p-3">
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
@@ -715,7 +882,136 @@ export default function AdminFilesPage() {
         </div>
       )}
 
-      {/* TAB 2: SIGNED TOKENS */}
+      {/* TAB 2: CLOUDFLARE R2 BUCKET OBJECTS */}
+      {activeTab === "r2" && (
+        <div className="space-y-6">
+          <div className="bg-[var(--white)] border border-[var(--line)] p-6 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-serif flex items-center gap-2">
+                <HardDrive className="w-5 h-5 text-[var(--cobalt)]" /> Cloudflare R2 Bucket Explorer
+              </h2>
+              <p className="text-xs text-[var(--ink-soft)] font-mono mt-1">
+                Connected Bucket: <strong className="text-[var(--ink)]">{bucketName || "portfolio"}</strong> ({r2Objects.length} objects stored)
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSyncR2}
+                disabled={syncing || r2Objects.length === 0}
+                className="flex items-center gap-1.5 px-4 py-2 bg-[var(--cobalt)] text-white text-xs font-mono uppercase tracking-wider hover:bg-[var(--ink)] transition-colors disabled:opacity-50"
+              >
+                <FolderSync className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`} /> Sync All R2 to Routes
+              </button>
+            </div>
+          </div>
+
+          {syncMsg && (
+            <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-mono">
+              {syncMsg}
+            </div>
+          )}
+
+          <div className="bg-[var(--white)] border border-[var(--line)] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-mono">
+                <thead className="bg-[var(--paper-deep)] border-b border-[var(--line)] text-[var(--ink-soft)] uppercase">
+                  <tr>
+                    <th className="p-3">R2 Object Key</th>
+                    <th className="p-3">File Size</th>
+                    <th className="p-3">Last Modified</th>
+                    <th className="p-3">Route Link Status</th>
+                    <th className="p-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--line)]">
+                  {r2Objects.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-[var(--ink-soft)]">
+                        No objects found in Cloudflare R2 bucket.
+                      </td>
+                    </tr>
+                  )}
+                  {r2Objects.map((obj) => {
+                    const isLinked = linkedKeys.has(obj.key);
+                    const matchingFile = files.find((f) => f.target_key === obj.key);
+
+                    return (
+                      <tr key={obj.key} className="hover:bg-[var(--paper)] transition-colors">
+                        <td className="p-3 font-semibold text-[var(--ink)] break-all">
+                          {obj.key}
+                        </td>
+                        <td className="p-3 text-[var(--ink-soft)] whitespace-nowrap">
+                          {formatBytes(obj.size)}
+                        </td>
+                        <td className="p-3 text-[var(--ink-soft)] whitespace-nowrap">
+                          {obj.lastModified ? new Date(obj.lastModified).toLocaleDateString() : "-"}
+                        </td>
+                        <td className="p-3">
+                          {isLinked && matchingFile ? (
+                            <a
+                              href={`/f/${matchingFile.slug}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-emerald-100 text-emerald-800 hover:underline"
+                            >
+                              /f/{matchingFile.slug} <ExternalLink className="w-2.5 h-2.5" />
+                            </a>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-gray-100 text-gray-600">
+                              Unlinked
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-3">
+                          <div className="flex items-center gap-2">
+                            {!isLinked ? (
+                              <button
+                                onClick={() => handleQuickCreateRoute(obj)}
+                                className="flex items-center gap-1 px-2 py-1 bg-[var(--paper-deep)] hover:bg-[var(--cobalt)] hover:text-white border border-[var(--line)] rounded text-[11px] transition-colors"
+                                title="Create /f/ route alias for this file"
+                              >
+                                <PlusCircle className="w-3 h-3" /> Create Alias
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  if (matchingFile) {
+                                    const url = `${window.location.origin}/f/${matchingFile.slug}`;
+                                    copyToClipboard(url, obj.key);
+                                  }
+                                }}
+                                title="Copy Public Link"
+                                className="p-1 hover:text-[var(--cobalt)] transition-colors"
+                              >
+                                {copiedToken === obj.key ? (
+                                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                ) : (
+                                  <Copy className="w-3.5 h-3.5" />
+                                )}
+                              </button>
+                            )}
+
+                            <button
+                              onClick={() => handleDeleteR2Object(obj.key)}
+                              title="Delete permanently from R2 bucket"
+                              className="p-1 text-red-400 hover:text-red-700 transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: SIGNED TOKENS */}
       {activeTab === "tokens" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="bg-[var(--white)] border border-[var(--line)] p-6 self-start">
@@ -919,7 +1215,7 @@ export default function AdminFilesPage() {
         </div>
       )}
 
-      {/* TAB 3: ANALYTICS */}
+      {/* TAB 4: ANALYTICS */}
       {activeTab === "analytics" && stats && (
         <div className="space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
