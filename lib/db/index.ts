@@ -1,22 +1,116 @@
-import { createClient, type Client } from "@libsql/client";
+import { createClient, type Client as LibsqlClient } from "@libsql/client";
 import { DEFAULT_FILES } from "@/data/default-files";
 
-let clientInstance: Client | null = null;
-let initialized = false;
+export interface DbQueryResult {
+  rows: Record<string, unknown>[];
+  rowsAffected: number;
+}
 
-export function getDbClient(): Client {
-  if (!clientInstance) {
-    const url = process.env.DATABASE_URL || "file:local.db";
-    const authToken = process.env.DATABASE_AUTH_TOKEN;
-    clientInstance = createClient({
+export interface GenericDbClient {
+  execute(query: string | { sql: string; args?: unknown[] }): Promise<DbQueryResult>;
+}
+
+// -------------------------------------------------------------------
+// 1. Cloudflare D1 HTTP Client Adapter
+// -------------------------------------------------------------------
+class CloudflareD1Client implements GenericDbClient {
+  private accountId: string;
+  private databaseId: string;
+  private apiToken: string;
+
+  constructor(accountId: string, databaseId: string, apiToken: string) {
+    this.accountId = accountId;
+    this.databaseId = databaseId;
+    this.apiToken = apiToken;
+  }
+
+  async execute(query: string | { sql: string; args?: unknown[] }): Promise<DbQueryResult> {
+    const sql = typeof query === "string" ? query : query.sql;
+    const params = typeof query === "string" ? [] : query.args || [];
+
+    const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/d1/database/${this.databaseId}/query`;
+    
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.apiToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sql,
+        params,
+      }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Cloudflare D1 Query Failed (${res.status}): ${errText}`);
+    }
+
+    const data = await res.json();
+    if (!data.success) {
+      const msg = data.errors?.map((e: { message: string }) => e.message).join(", ") || "Unknown D1 error";
+      throw new Error(`Cloudflare D1 Error: ${msg}`);
+    }
+
+    const firstResult = data.result?.[0];
+    return {
+      rows: firstResult?.results || [],
+      rowsAffected: firstResult?.meta?.changes || 0,
+    };
+  }
+}
+
+// -------------------------------------------------------------------
+// 2. LibSQL / SQLite Client Adapter (Local or Turso)
+// -------------------------------------------------------------------
+class LibsqlDbClientAdapter implements GenericDbClient {
+  private client: LibsqlClient;
+
+  constructor(url: string, authToken?: string) {
+    this.client = createClient({
       url,
       authToken,
     });
   }
-  return clientInstance;
+
+  async execute(query: string | { sql: string; args?: unknown[] }): Promise<DbQueryResult> {
+    const sql = typeof query === "string" ? query : query.sql;
+    const args = typeof query === "string" ? [] : query.args || [];
+    const res = await this.client.execute({ sql, args: args as any });
+    return {
+      rows: res.rows as unknown as Record<string, unknown>[],
+      rowsAffected: res.rowsAffected,
+    };
+  }
 }
 
-export async function initDatabase(): Promise<Client> {
+let dbInstance: GenericDbClient | null = null;
+let initialized = false;
+
+export function getDbClient(): GenericDbClient {
+  if (dbInstance) return dbInstance;
+
+  const url = process.env.DATABASE_URL || "file:local.db";
+  const authToken = process.env.DATABASE_AUTH_TOKEN;
+  const accountId = process.env.R2_ACCOUNT_ID;
+  const d1DatabaseId = process.env.D1_DATABASE_ID;
+
+  // Check if configured for Cloudflare D1
+  if ((url.includes("api.cloudflare.com") || d1DatabaseId) && accountId && authToken) {
+    const dbId = d1DatabaseId || url.split("/database/")[1]?.split("/")[0]?.split("?")[0];
+    if (dbId) {
+      dbInstance = new CloudflareD1Client(accountId, dbId, authToken);
+      return dbInstance;
+    }
+  }
+
+  // Fallback to LibSQL / SQLite (file:local.db or Turso)
+  dbInstance = new LibsqlDbClientAdapter(url, authToken);
+  return dbInstance;
+}
+
+export async function initDatabase(): Promise<GenericDbClient> {
   const db = getDbClient();
   if (initialized) return db;
 
