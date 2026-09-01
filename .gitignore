@@ -49,3 +49,5 @@ next-env.d.ts
 *.db-wal
 *.db-shm
 local.db
+
+.temp

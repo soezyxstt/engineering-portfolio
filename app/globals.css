@@ -650,7 +650,9 @@ h3 { letter-spacing: -0.035em; line-height: 1.05; }
 .resume-summary, .resume-section { display: grid; grid-template-columns: 12rem 1fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line-strong); }
 .resume-summary h2, .resume-section h2 { font-family: var(--font-dm-mono), monospace; font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
 .resume-summary p { max-width: 48rem; color: var(--ink-soft); line-height: 1.7; }
+.resume-section-body { min-width: 0; }
 .resume-row { display: grid; grid-template-columns: 10rem 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.resume-row:last-child { margin-bottom: 0; }
 .resume-row > span { color: var(--ink-soft); font-family: var(--font-dm-mono), monospace; font-size: .58rem; text-transform: uppercase; }
 .resume-row strong { display: block; margin-bottom: .25rem; }
 .resume-row p { color: var(--ink-soft); font-size: .8rem; line-height: 1.55; }
