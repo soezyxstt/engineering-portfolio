@@ -6,7 +6,7 @@ Bandung, Indonesia | 13122080@mahasiswa.itb.ac.id | [adihnursyam.com](https://ad
 
 ## Summary
 
-Software engineer with a Mechanical Engineering background from Institut Teknologi Bandung (GPA 3.90/4.00), building full-stack products, AI-enabled systems, and software that connects with physical systems. Experience spans product architecture, frontend, backend, data, cloud deployment, and embedded integration.
+Software engineer with a Mechanical Engineering background from Institut Teknologi Bandung (GPA 3.91/4.00), building full-stack products, AI-enabled systems, and software that connects with physical systems. Experience spans product architecture, frontend, backend, data, cloud deployment, and embedded integration.
 
 ## Experience
 
@@ -48,7 +48,7 @@ Software engineer with a Mechanical Engineering background from Institut Teknolo
 ## Education
 
 **Institut Teknologi Bandung**  
-B.Eng. Candidate, Mechanical Engineering | 2022 - 2026 | **GPA 3.90/4.00**
+B.Eng. Candidate, Mechanical Engineering | 2022 - 2026 | **GPA 3.91/4.00**
 
 ## Technical Skills
 
