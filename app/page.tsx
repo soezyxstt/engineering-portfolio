@@ -63,7 +63,7 @@ export default function Home() {
         <div className="hero-proof" aria-label="Profile highlights">
           <div><span>01 / Current work</span><strong>Full-stack & AI products</strong></div>
           <div><span>02 / Foundation</span><strong>Mechanical Engineering, ITB</strong></div>
-          <div><span>03 / Academic record</span><strong>3.90 / 4.00 GPA</strong></div>
+          <div><span>03 / Academic record</span><strong>3.91 / 4.00 GPA</strong></div>
           <div><span>04 / Ownership</span><strong>Founder & CEO, Zyx Academy</strong></div>
         </div>
       </section>
