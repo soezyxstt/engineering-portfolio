@@ -67,7 +67,7 @@ export default function ResumePage() {
         <PrintButton />
       </header>
       <section className="resume-summary"><h2>Profile</h2><p>Software engineer and founder with a Mechanical Engineering background from ITB. Builds full-stack products, AI-enabled learning systems, and software for real engineering problems across product architecture, frontend, backend, data, cloud infrastructure, and AI workflows.</p></section>
-      <section className="resume-section"><h2>Education</h2><div className="resume-section-body"><div className="resume-row"><span>Aug 2022–Jul 2026</span><div><strong>Bachelor of Engineering, Mechanical Engineering · Institut Teknologi Bandung</strong><p>GPA 3.90/4.00 · Selected as one of three outstanding students from the 2022 Mechanical Engineering cohort.</p></div></div></div></section>
+      <section className="resume-section"><h2>Education</h2><div className="resume-section-body"><div className="resume-row"><span>Aug 2022–Jul 2026</span><div><strong>Bachelor of Engineering, Mechanical Engineering · Institut Teknologi Bandung</strong><p>GPA 3.91/4.00 · Selected as one of three outstanding students from the 2022 Mechanical Engineering cohort.</p></div></div></div></section>
       <section className="resume-section"><h2>Selected work</h2>
         <div className="resume-section-body">
           <div className="resume-row"><span>2026</span><div><strong>Two-DOF SCARA Robot</strong><p>Built the mechanical system, ESP32 firmware, selectable model-based control, telemetry, and Next.js HMI. Tracking differentiation reduced mean absolute tracking error by 38.7%; a trapezoidal profile reduced end-effector RMSE by 50.4%.</p></div></div>
