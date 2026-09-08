@@ -41,7 +41,7 @@ export default function AboutPage() {
         <div><p className="kicker"><span>01</span>Academic foundation</p><h2>Institut Teknologi Bandung</h2></div>
         <div className="academic-details">
           <div><span>Program</span><strong>Bachelor of Engineering, Mechanical Engineering · Aug 2022 to Jul 2026</strong></div>
-          <div><span>GPA</span><strong>3.90 / 4.00</strong></div>
+          <div><span>GPA</span><strong>3.91 / 4.00</strong></div>
           <div><span>Recognition</span><strong>Mechanical Engineering Outstanding Student 2022, selected as one of three students in the department.</strong></div>
           <div><span>Teaching</span><strong>Statics & Structural Analysis Academic Assistant; Computational Thinking Practicum Assistant.</strong></div>
         </div>
