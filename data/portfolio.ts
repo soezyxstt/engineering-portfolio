@@ -36,6 +36,36 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "tampiloka",
+    title: "Tampiloka",
+    eyebrow: "Web Studio",
+    year: "2026",
+    role: "Design and full-stack development",
+    status: "Live web studio",
+    summary: "A web studio for brands and businesses, bringing website design, digital products, development, and brand identity together.",
+    challenge: "Present a studio's services clearly and let visitors explore its work before starting a project.",
+    response: "Built a responsive studio website with a visual project showcase, interactive demo sites, service and industry pages, and a direct project inquiry flow.",
+    outcome: "A live studio website where visitors can explore four concept sites and find the services relevant to their business.",
+    disciplines: ["Software", "Product"],
+    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+    highlights: ["Four interactive concept sites", "Responsive project showcase", "Services and industry pages"],
+    architecture: [
+      { label: "Studio", detail: "The homepage connects the studio identity, selected work, services, and contact." },
+      { label: "Showcase", detail: "Large website previews connect to interactive demo sites." },
+      { label: "Services", detail: "Dedicated pages explain website, digital product, development, and branding services." },
+      { label: "Contact", detail: "A project inquiry page gives visitors a clear next step." },
+    ],
+    decisions: [
+      { title: "Let the work speak", detail: "Large previews and direct demo links let visitors explore the design in context." },
+      { title: "Keep the next step clear", detail: "Concise service descriptions and contact links make it easy to move from browsing to a project discussion." },
+    ],
+    image: "/work/tampiloka/home.png",
+    liveUrl: "https://tampiloka.adihnursyam.com",
+    flagship: true,
+    accent: "#168349",
+    evidence: "Live studio website and four publicly accessible concept sites",
+  },
+  {
     slug: "scara-robot",
     title: "Two-DOF SCARA Robot",
     eyebrow: "Flagship / Robotics & Control",

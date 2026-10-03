@@ -3,8 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "*": [
-      "./public/**/*",
-      "public/**/*",
       "**/*.glb",
       "**/*.mp4",
       "**/*.png",
@@ -15,6 +13,9 @@ const nextConfig: NextConfig = {
       "node_modules/@libsql/darwin-*",
       "node_modules/@libsql/win32-*",
     ],
+  },
+  outputFileTracingIncludes: {
+    "/f/*": ["./public/resume/*.pdf"],
   },
 };
 

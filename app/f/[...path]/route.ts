@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "node:path";
+import { readFile, stat } from "node:fs/promises";
+import { DEFAULT_FILES } from "@/data/default-files";
 import { getFileBySlug, logFileAccess } from "@/lib/db/queries";
 import { fetchFileFromStorage } from "@/lib/storage/r2";
 
@@ -17,6 +19,27 @@ export async function GET(
 
     const requestedSlug = pathSegments.join("/");
     const filename = path.basename(requestedSlug);
+
+    // These public résumés ship with the site so current downloads do not
+    // depend on an older R2 upload or a registry alias that has expired.
+    const bundledResume = DEFAULT_FILES.find(
+      (file) => file.isPublic && file.targetKey.startsWith("resume/") && file.contentType === "application/pdf" && file.slug === requestedSlug
+    );
+    if (bundledResume) {
+      const localPath = path.join(process.cwd(), "public", bundledResume.targetKey);
+      const [body, fileStats] = await Promise.all([readFile(localPath), stat(localPath)]);
+      return new Response(new Uint8Array(body), {
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `inline; filename="${encodeURIComponent(filename)}"`,
+          "Content-Length": String(body.byteLength),
+          "Cache-Control": "public, max-age=0, must-revalidate",
+          "Last-Modified": fileStats.mtime.toUTCString(),
+          "X-Content-Type-Options": "nosniff",
+          "X-File-Source": "local",
+        },
+      });
+    }
 
     // 1. Check if slug exists in DB registry
     const fileRecord = await getFileBySlug(requestedSlug);

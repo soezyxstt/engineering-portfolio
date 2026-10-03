@@ -25,10 +25,8 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="about-portrait">
           <Image src={profilePhoto} alt="Adi Haditya Nursyam at Institut Teknologi Bandung" placeholder="blur" priority sizes="(max-width: 900px) 100vw, 50vw" />
-          <span>ADI HADITYA NURSYAM / BANDUNG</span>
         </div>
         <div className="about-intro">
-          <p className="kicker"><span>Profile / 04</span>About</p>
           <h1>Software is most useful when it understands the system around it.</h1>
           <p className="route-lead">I am a software engineer and the founder and CEO of Zyx Academy, with a Mechanical Engineering foundation from ITB.</p>
           <p>I build full-stack products, AI-enabled learning systems, and software connected to real engineering problems. At Zyx, I lead product and engineering across structured content, assessment, spaced repetition, progress, retrieval-backed tutoring, relational and vector data, cloud infrastructure, and internal authoring systems.</p>
@@ -38,7 +36,7 @@ export default function AboutPage() {
       </section>
 
       <section className="page-section academic-panel">
-        <div><p className="kicker"><span>01</span>Academic foundation</p><h2>Institut Teknologi Bandung</h2></div>
+        <div><h2>Institut Teknologi Bandung</h2></div>
         <div className="academic-details">
           <div><span>Program</span><strong>Bachelor of Engineering, Mechanical Engineering · Aug 2022 to Jul 2026</strong></div>
           <div><span>GPA</span><strong>3.91 / 4.00</strong></div>
@@ -48,7 +46,7 @@ export default function AboutPage() {
       </section>
 
       <section className="page-section values-section">
-        <div className="case-section-heading"><p className="kicker"><span>02</span>Working philosophy</p><h2>Principles I use to make decisions</h2></div>
+        <div className="case-section-heading"><h2>Principles I use to make decisions</h2></div>
         <div className="values-list">
           {values.map(([title, detail], index) => (
             <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{detail}</p></article>

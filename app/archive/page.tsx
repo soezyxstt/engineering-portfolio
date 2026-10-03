@@ -11,12 +11,10 @@ export default function ArchivePage() {
   return (
     <>
       <section className="route-hero compact-route-hero">
-        <p className="kicker"><span>Index / 02</span>Archive</p>
-        <h1>The wider body of work.</h1>
-        <p className="route-lead">A compact index for exploring projects by discipline. Full case studies are reserved for work with enough evidence and technical depth.</p>
+        <h1>Project archive.</h1>
+        <p className="route-lead">Explore my projects by discipline.</p>
       </section>
       <section className="page-section archive-section"><ArchiveFilter /></section>
     </>
   );
 }
-

@@ -17,7 +17,6 @@ export function DisciplineLanding({ eyebrow, title, intro, statement, projects, 
   return (
     <>
       <section className="route-hero route-hero-discipline">
-        <p className="kicker"><span>Field note</span>{eyebrow}</p>
         <h1>{title}</h1>
         <div className="route-hero-grid">
           <p className="route-lead">{intro}</p>
@@ -36,8 +35,7 @@ export function DisciplineLanding({ eyebrow, title, intro, statement, projects, 
         <SectionHeading
           index="02"
           eyebrow="Working range"
-          title="What I bring to the problem"
-          intro="Capabilities are paired with the decisions they support, not presented as an ungrounded technology inventory."
+          title="Capabilities"
         />
         <div className="principle-grid">
           {capabilities.map((capability, index) => (

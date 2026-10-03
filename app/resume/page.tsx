@@ -32,6 +32,14 @@ const resumeVariants = [
   {
     label: "General Master",
     note: "A broad profile spanning software, engineering, leadership, and product ownership.",
+    english: "/f/general-resume.pdf",
+    indonesian: "/f/general-resume-id.pdf",
+  },
+  {
+    label: "STEM & Coding Educator",
+    note: "For STEM teaching, coding instruction, tutoring, and learning-program roles.",
+    english: "/f/educator-resume.pdf",
+    indonesian: "/f/educator-resume-id.pdf",
   },
 ];
 
@@ -40,7 +48,6 @@ export default function ResumePage() {
     <article className="resume-page">
       <section className="resume-downloads">
         <div className="resume-downloads-heading">
-          <p className="kicker"><span>Role-specific</span> résumé library</p>
           <h1>Choose the version that matches the role.</h1>
           <p>The English Software Engineer résumé is the best default for global recruiters. Specialist versions keep the same career story while foregrounding the most relevant evidence.</p>
         </div>
@@ -48,7 +55,6 @@ export default function ResumePage() {
           {resumeVariants.map((variant) => (
             <article className={variant.featured ? "resume-variant is-featured" : "resume-variant"} key={variant.label}>
               <div>
-                <p className="kicker">{variant.featured ? "Recommended" : "Specialist"}</p>
                 <h2>{variant.label}</h2>
                 <p>{variant.note}</p>
               </div>
@@ -62,7 +68,7 @@ export default function ResumePage() {
       </section>
 
       <header className="resume-header">
-        <div><p className="kicker">Browser résumé / 2026</p><h2 className="resume-name">Adi Haditya Nursyam</h2><p>Software Engineer · Founder & CEO, Zyx Academy · Full-Stack & AI Products</p></div>
+        <div><h2 className="resume-name">Adi Haditya Nursyam</h2><p>Software Engineer · Founder & CEO, Zyx Academy · Full-Stack & AI Products</p></div>
         <div className="resume-contact"><a href="mailto:soezyxst@gmail.com">soezyxst@gmail.com</a><a href="https://github.com/soezyxstt">github.com/soezyxstt</a><a href="https://www.linkedin.com/in/adihnursyam/">linkedin.com/in/adihnursyam</a></div>
         <PrintButton />
       </header>

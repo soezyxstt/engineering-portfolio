@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function SoftwarePage() {
-  const selected = ["zyx-academy", "hmm-itb-platform", "iam-itb", "pemira-platform"]
+  const selected = ["tampiloka", "zyx-academy", "hmm-itb-platform", "iam-itb", "pemira-platform"]
     .map((slug) => projects.find((project) => project.slug === slug))
     .filter((project): project is NonNullable<typeof project> => Boolean(project));
 

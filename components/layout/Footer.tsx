@@ -5,7 +5,6 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-callout">
-        <p className="kicker">Contact / Jakarta time</p>
         <h2>Let’s build the whole system.</h2>
         <p>
           Open to software engineering, full-stack, backend, AI product, and product-engineering conversations.

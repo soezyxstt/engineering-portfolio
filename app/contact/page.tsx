@@ -6,8 +6,7 @@ export const metadata: Metadata = { title: "Contact", description: "Contact Adi 
 export default function ContactPage() {
   return (
     <section className="contact-page">
-      <p className="kicker"><span>Channel / 05</span>Contact</p>
-      <h1>For engineering work that crosses boundaries.</h1>
+      <h1>Let’s work together.</h1>
       <p className="route-lead">I’m interested in software, robotics, mechatronics, product engineering, technical leadership, and founding-engineer opportunities.</p>
       <div className="contact-links">
         <a href="mailto:soezyxst@gmail.com"><span>Email</span><strong>soezyxst@gmail.com</strong><ArrowUpRight /></a>
@@ -18,4 +17,3 @@ export default function ContactPage() {
     </section>
   );
 }
-

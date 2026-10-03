@@ -33,14 +33,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
   const currentIndex = projects.findIndex((entry) => entry.slug === project.slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
-  const videoSectionIndex = project.gallery?.length ? "05" : "04";
-  const proofSectionIndex = String(4 + (project.gallery?.length ? 1 : 0) + (project.videos?.length ? 1 : 0)).padStart(2, "0");
 
   return (
     <article className="case-study" style={{ "--project-accent": project.accent } as React.CSSProperties}>
       <header className="case-hero">
         <Link href="/work" className="back-link"><ArrowLeft size={15} /> All work</Link>
-        <p className="kicker"><span>{String(currentIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>{project.eyebrow}</p>
         <h1>{project.title}</h1>
         <p className="case-summary">{project.summary}</p>
         <div className="case-meta-grid">
@@ -57,7 +54,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <div className="case-visual">
         {project.image ? (
-          <Image src={project.image} alt={`Interface view of ${project.title}`} fill preload sizes="100vw" className="case-image" />
+          <Image src={project.image} alt={`${project.title} project preview`} fill preload sizes="100vw" className="case-image" />
         ) : (
           <div className="case-schematic" aria-label="SCARA system signal path">
             {project.architecture.map((layer, index) => (
@@ -72,7 +69,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </div>
 
       <section className="case-section case-narrative">
-        <div><p className="kicker"><span>01</span>Context</p><h2>The engineering problem</h2></div>
+        <div><h2>The engineering problem</h2></div>
         <div className="narrative-columns">
           <div><span>Challenge</span><p>{project.challenge}</p></div>
           <div><span>Response</span><p>{project.response}</p></div>
@@ -82,17 +79,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <section className="case-section">
         <div className="case-section-heading">
-          <p className="kicker"><span>02</span>System architecture</p>
-          <h2>How the layers connect</h2>
-          <p>The diagram is paired with a text alternative and remains readable without animation or WebGL.</p>
+          <h2>System architecture</h2>
         </div>
         <ArchitectureDiagram project={project} />
       </section>
 
       <section className="case-section decision-section">
         <div className="case-section-heading">
-          <p className="kicker"><span>03</span>Engineering decisions</p>
-          <h2>Choices that shaped the result</h2>
+          <h2>Engineering decisions</h2>
         </div>
         <div className="decision-list">
           {project.decisions.map((decision, index) => (
@@ -107,9 +101,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {project.gallery?.length ? (
         <section className="case-section case-gallery-section">
           <div className="case-section-heading">
-            <p className="kicker"><span>04</span>Product evidence</p>
-            <h2>Selected interface views</h2>
-            <p>Captured from the deployed product. Authenticated screens are shown only in privacy-safe states.</p>
+            <h2>Project gallery</h2>
           </div>
           <div className="case-gallery">
             {project.gallery.map((item) => (
@@ -127,9 +119,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {project.videos?.length ? (
         <section className="case-section case-video-section">
           <div className="case-section-heading">
-            <p className="kicker"><span>{videoSectionIndex}</span>System in motion</p>
-            <h2>Selected demonstrations</h2>
-            <p>Short, recruiter-friendly clips. Playback is manual and videos load metadata only until opened.</p>
+            <h2>Demonstrations</h2>
           </div>
           <div className="case-video-grid">
             {project.videos.map((item) => (
@@ -146,8 +136,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <section className="case-section case-proof">
         <div>
-          <p className="kicker"><span>{proofSectionIndex}</span>Technical footprint</p>
-          <h2>Stack in context</h2>
+          <h2>Tools and technologies</h2>
         </div>
         <div>
           <ul className="stack-list">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>

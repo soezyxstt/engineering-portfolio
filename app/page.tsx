@@ -6,11 +6,11 @@ import { capabilityGroups, projects } from "@/data/portfolio";
 import experience from "@/data/experience.json";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeaturedWorkIndex } from "@/components/home/FeaturedWorkIndex";
-import { TypedSpecialty } from "@/components/home/TypedSpecialty";
 import { recognition } from "@/data/recognition";
 
 export default function Home() {
   const featuredSlugs = [
+    "tampiloka",
     "scara-robot",
     "zyx-academy",
     "hmm-itb-platform",
@@ -32,7 +32,6 @@ export default function Home() {
     <>
       <section className="home-hero" data-reveal>
         <div className="hero-intro">
-          <p className="kicker hero-kicker"><span>Portfolio / 2026</span>Bandung, Indonesia</p>
           <h1>I build software for systems that have to work.</h1>
         </div>
 
@@ -40,7 +39,6 @@ export default function Home() {
           <p className="hero-statement">
             I&apos;m Adi, a software engineer and founder working across full stack products, backend systems, and applied AI, with a foundation in mechanical engineering and robotics.
           </p>
-          <p className="hero-availability">Current practice: <TypedSpecialty /></p>
           <div className="hero-actions">
             <Link href="/work" className="button button-primary">
               Selected work <ArrowRight size={17} />
@@ -61,10 +59,10 @@ export default function Home() {
         </div>
 
         <div className="hero-proof" aria-label="Profile highlights">
-          <div><span>01 / Current work</span><strong>Full-stack & AI products</strong></div>
-          <div><span>02 / Foundation</span><strong>Mechanical Engineering, ITB</strong></div>
-          <div><span>03 / Academic record</span><strong>3.91 / 4.00 GPA</strong></div>
-          <div><span>04 / Ownership</span><strong>Founder & CEO, Zyx Academy</strong></div>
+          <div><span>Current work</span><strong>Full-stack & AI products</strong></div>
+          <div><span>Education</span><strong>Mechanical Engineering, ITB</strong></div>
+          <div><span>GPA</span><strong>3.91 / 4.00</strong></div>
+          <div><span>Leadership</span><strong>Founder & CEO, Zyx Academy</strong></div>
         </div>
       </section>
 
@@ -72,8 +70,8 @@ export default function Home() {
         <SectionHeading
           index="01"
           eyebrow="Selected case studies"
-          title="Read the system, not just the screenshot."
-          intro="Each case study makes the challenge, my role, the architecture, and the evidence visible. Hover or focus to preview; open one to inspect the decisions behind it."
+          title="Selected work"
+          intro="Projects across software, robotics, and product engineering. Explore the challenge, my role, and the decisions behind each build."
         />
         <FeaturedWorkIndex projects={featuredProjects} />
         <div className="section-action">
@@ -85,7 +83,7 @@ export default function Home() {
         <SectionHeading
           index="02"
           eyebrow="Experience & organizations"
-          title="Responsibility across very different rooms."
+          title="Experience & leadership"
           intro="Power-plant maintenance, robotics, digital infrastructure, and regional student leadership taught me to work with real constraints, stakeholders, and consequences."
         />
         <div className="home-experience-list">
@@ -107,8 +105,8 @@ export default function Home() {
         <SectionHeading
           index="03"
           eyebrow="Recognition"
-          title="Selected by institutions, tested in competition."
-          intro="A compact record of academic, robotics, and regional recognition, kept factual and connected to the institution that issued it."
+          title="Recognition"
+          intro="Academic, robotics, and regional awards."
         />
         <div className="recognition-list">
           {recognition.map((item, index) => (
@@ -125,8 +123,8 @@ export default function Home() {
         <SectionHeading
           index="04"
           eyebrow="Engineering range"
-          title="Four areas, one practical method."
-          intro="The range is stated plainly and tied to work. No proficiency meters, only capabilities and the projects where they were applied."
+          title="What I work with"
+          intro="Capabilities and the projects where I have applied them."
         />
         <div className="capability-ledger">
           {capabilityGroups.map((group, index) => (
@@ -152,12 +150,9 @@ export default function Home() {
               sizes="(max-width: 800px) 100vw, 48vw"
               className="profile-photo"
             />
-            <span className="photo-note photo-note-top">PROFILE / 01</span>
-            <span className="photo-note photo-note-bottom">Bandung, Indonesia · GMT+7</span>
           </div>
         </div>
         <div className="profile-copy">
-          <p className="kicker"><span>05</span>Profile</p>
           <h2>Software engineer by practice. Mechanical engineer by foundation.</h2>
           <p className="profile-lead">
             I work across product architecture, frontend and backend development, data, AI workflows, and cloud infrastructure without losing sight of the physical systems and people the software serves.
@@ -176,9 +171,8 @@ export default function Home() {
       </section>
 
       <section className="founder-spotlight" data-reveal>
-        <div className="founder-index">06</div>
         <div>
-          <p className="kicker">Founder spotlight / Zyx Academy</p>
+          <p className="kicker">Zyx Academy</p>
           <h2>Building an AI learning product means owning the knowledge system.</h2>
         </div>
         <div className="founder-copy">
