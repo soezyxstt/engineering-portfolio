@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 
 export function Footer() {
@@ -14,7 +15,13 @@ export function Footer() {
         </a>
       </div>
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} Adi Haditya Nursyam</p>
+        <div className="footer-brand">
+          <Link href="/" aria-label="Adi Haditya Nursyam, home">
+            <Image src="/brand/ahn-navbar-light.svg" alt="" width={240} height={48} className="footer-mark footer-mark-light" />
+            <Image src="/brand/ahn-footer.svg" alt="" width={320} height={64} className="footer-mark footer-mark-dark" />
+          </Link>
+          <p>© {new Date().getFullYear()} Adi Haditya Nursyam</p>
+        </div>
         <nav aria-label="Footer navigation">
           <a href="https://github.com/soezyxstt" target="_blank" rel="noreferrer">
             GitHub

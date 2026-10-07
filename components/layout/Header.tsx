@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -24,9 +25,9 @@ export function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="brand" aria-label="Adi Haditya Nursyam, home" onClick={() => setOpen(false)}>
-          <span className="brand-copy">
-            <strong>Adi Haditya Nursyam</strong>
-            <small>Software engineer & founder</small>
+          <span className="brand-wordmark" aria-hidden="true">
+            <Image src="/brand/ahn-navbar-light.svg" alt="" width={240} height={48} className="brand-mark brand-mark-light" />
+            <Image src="/brand/ahn-navbar-dark.svg" alt="" width={240} height={48} className="brand-mark brand-mark-dark" />
           </span>
         </Link>
 

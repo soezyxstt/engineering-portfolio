@@ -37,6 +37,14 @@ export const metadata: Metadata = {
     "Indonesia",
   ],
   alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: "/brand/ahn-favicon-16-optical.png", sizes: "16x16", type: "image/png" },
+      { url: "/brand/ahn-favicon-32-optical.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/ahn-favicon-48.png", sizes: "48x48", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/ahn-apple-touch-180.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: "Adi Haditya Nursyam | Software Engineer & Founder",
     description: "Full-stack products and AI-enabled systems, grounded in mechanical engineering and robotics.",
@@ -44,13 +52,13 @@ export const metadata: Metadata = {
     siteName: "Adi Haditya Nursyam",
     type: "website",
     locale: "en_US",
-    images: [{ url: "/me_photo.jpeg", width: 853, height: 1517, alt: "Adi Haditya Nursyam" }],
+    images: [{ url: "/brand/ahn-og.png", width: 1200, height: 630, alt: "Adi Haditya Nursyam" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Adi Haditya Nursyam | Software Engineer & Founder",
     description: "I build full-stack products and AI-enabled systems across digital and physical layers.",
-    images: ["/me_photo.jpeg"],
+    images: ["/brand/ahn-og.png"],
   },
   robots: { index: true, follow: true },
 };
