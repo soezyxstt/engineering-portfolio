@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import profilePhoto from "@/public/me_photo.jpeg";
-import { capabilityGroups, projects } from "@/data/portfolio";
+import { projects } from "@/data/portfolio";
 import experience from "@/data/experience.json";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeaturedWorkIndex } from "@/components/home/FeaturedWorkIndex";
+import { CapabilityMap } from "@/components/home/CapabilityMap";
 import { recognition } from "@/data/recognition";
 
 export default function Home() {
@@ -126,18 +127,7 @@ export default function Home() {
           title="What I work with"
           intro="Capabilities and the projects where I have applied them."
         />
-        <div className="capability-ledger">
-          {capabilityGroups.map((group, index) => (
-            <article key={group.label}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div>
-                <h3>{group.label}</h3>
-                <ul>{group.capabilities.map((capability) => <li key={capability}>{capability}</li>)}</ul>
-              </div>
-              <p><span>Demonstrated in</span>{group.projects.join(" · ")}</p>
-            </article>
-          ))}
-        </div>
+        <CapabilityMap />
       </section>
 
       <section className="page-section profile-section" data-reveal>

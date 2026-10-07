@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const reduced = useReducedMotion();
 
   return (
     <header className="site-header">
@@ -56,12 +58,15 @@ export function Header() {
         </button>
       </div>
 
-      <nav
+      <motion.nav
         id="mobile-navigation"
         className={`mobile-nav ${open ? "is-open" : ""}`}
         aria-label="Mobile navigation"
         aria-hidden={!open}
         inert={!open}
+        initial={false}
+        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+        transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
         {navItems.map((item, index) => (
           <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>
@@ -76,7 +81,7 @@ export function Header() {
           <span>07</span>Résumé
         </Link>
         <div className="mobile-theme-row"><span>08</span><ThemeSwitcher /></div>
-      </nav>
+      </motion.nav>
     </header>
   );
 }

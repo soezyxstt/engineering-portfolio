@@ -1,60 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { Plus } from "lucide-react";
 import { capabilityGroups } from "@/data/portfolio";
 
 export function CapabilityMap() {
-  const [active, setActive] = useState(0);
-  const selected = capabilityGroups[active];
+  const [active, setActive] = useState<number | null>(0);
+  const id = useId();
+  const reduced = useReducedMotion();
 
   return (
-    <div className="capability-map">
-      <div className="capability-tabs" role="tablist" aria-label="Engineering capability layers">
-        {capabilityGroups.map((group, index) => (
-          <button
-            type="button"
-            role="tab"
-            aria-selected={active === index}
-            aria-controls="capability-panel"
-            id={`capability-tab-${index}`}
-            key={group.label}
-            onClick={() => setActive(index)}
-            className={active === index ? "is-active" : ""}
-          >
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            {group.label}
-          </button>
-        ))}
-      </div>
-      <div
-        className="capability-panel"
-        id="capability-panel"
-        role="tabpanel"
-        aria-labelledby={`capability-tab-${active}`}
-      >
-        <div className="capability-orbit" aria-hidden>
-          <span className="orbit-core">SYSTEM</span>
-          {selected.capabilities.map((capability, index) => (
-            <span className={`orbit-label orbit-label-${index + 1}`} key={capability}>
-              {capability}
-            </span>
-          ))}
-        </div>
-        <div className="capability-detail">
-          <p className="kicker">Active layer</p>
-          <h3>{selected.label}</h3>
-          <ul>
-            {selected.capabilities.map((capability) => (
-              <li key={capability}>{capability}</li>
-            ))}
-          </ul>
-          <p className="capability-projects">
-            <span>Demonstrated in</span>
-            {selected.projects.join(" · ")}
-          </p>
-        </div>
-      </div>
+    <div className="capability-ledger">
+      {capabilityGroups.map((group, index) => {
+        const open = active === index;
+        return (
+          <article key={group.label} className="capability-disclosure">
+            <h3>
+              <button type="button" id={`${id}-trigger-${index}`} aria-expanded={open} aria-controls={`${id}-panel-${index}`} onClick={() => setActive(open ? null : index)}>
+                <span className="capability-number">{String(index + 1).padStart(2, "0")}</span>
+                {group.label}
+                <motion.span className="capability-toggle" aria-hidden animate={{ rotate: open ? 45 : 0 }} transition={{ duration: reduced ? 0 : 0.3 }}><Plus size={20} /></motion.span>
+              </button>
+            </h3>
+            <motion.div id={`${id}-panel-${index}`} role="region" aria-labelledby={`${id}-trigger-${index}`} aria-hidden={!open} inert={!open} className="capability-content" initial={false} animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }} transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}>
+              <div className="capability-content-inner">
+                <ul>{group.capabilities.map((capability) => <li key={capability}>{capability}</li>)}</ul>
+                <p><span>Demonstrated in</span>{group.projects.join(" · ")}</p>
+              </div>
+            </motion.div>
+          </article>
+        );
+      })}
     </div>
   );
 }
-

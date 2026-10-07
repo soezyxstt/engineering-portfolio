@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Maximize2, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import type { Project } from "@/data/portfolio";
+
+const MotionLink = motion.create(Link);
 
 function PreviewImage({ project }: { project: Project }) {
   if (project.image) return <Image src={project.image} alt={`Preview of ${project.title}`} fill sizes="(max-width: 800px) 100vw, 50vw" className="website-showcase-image" />;
@@ -20,6 +23,7 @@ function PreviewImage({ project }: { project: Project }) {
 }
 
 export function WebsitePreview({ project }: { project: Project }) {
+  const reduced = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [showScreenshot, setShowScreenshot] = useState(false);
   const [frameState, setFrameState] = useState<"loading" | "loaded" | "unavailable">("loading");
@@ -50,22 +54,22 @@ export function WebsitePreview({ project }: { project: Project }) {
 
   return (
     <>
-      <div className="website-showcase-preview">
+      <motion.div className="website-showcase-preview" initial="rest" whileHover="hover" transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}>
         {project.liveUrl ? (
-          <button type="button" ref={triggerRef} className="website-showcase-trigger" aria-label={`Preview ${project.title}`} aria-haspopup="dialog" onClick={() => { setFrameState("loading"); setShowScreenshot(false); setOpen(true); }}>
-            <PreviewImage project={project} />
-            <span className="website-showcase-preview-action"><Maximize2 size={15} aria-hidden /> Preview site</span>
-          </button>
+          <motion.button type="button" ref={triggerRef} className="website-showcase-trigger" whileFocus="hover" aria-label={`Preview ${project.title}`} aria-haspopup="dialog" onClick={() => { setFrameState("loading"); setShowScreenshot(false); setOpen(true); }}>
+            <motion.div className="website-showcase-media" variants={{ rest: { scale: 1 }, hover: { scale: reduced ? 1 : 1.035 } }} transition={{ duration: reduced ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}><PreviewImage project={project} /></motion.div>
+            <motion.span className="website-showcase-preview-action" variants={{ rest: { y: 0 }, hover: { y: reduced ? 0 : -5 } }} transition={{ duration: reduced ? 0 : 0.35 }}><Maximize2 size={15} aria-hidden /> Preview site</motion.span>
+          </motion.button>
         ) : (
-          <Link href={`/work/${project.slug}`} className="website-showcase-trigger" aria-label={`View ${project.title} case study`}>
-            <PreviewImage project={project} />
-            <span className="website-showcase-preview-action">View case study <ArrowUpRight size={15} aria-hidden /></span>
-          </Link>
+          <MotionLink href={`/work/${project.slug}`} className="website-showcase-trigger" whileFocus="hover" aria-label={`View ${project.title} case study`}>
+            <motion.div className="website-showcase-media" variants={{ rest: { scale: 1 }, hover: { scale: reduced ? 1 : 1.035 } }} transition={{ duration: reduced ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}><PreviewImage project={project} /></motion.div>
+            <motion.span className="website-showcase-preview-action" variants={{ rest: { y: 0 }, hover: { y: reduced ? 0 : -5 } }} transition={{ duration: reduced ? 0 : 0.35 }}>View case study <ArrowUpRight size={15} aria-hidden /></motion.span>
+          </MotionLink>
         )}
-      </div>
+      </motion.div>
       {open && project.liveUrl && (
         <dialog ref={dialogRef} className="website-preview-dialog" aria-labelledby={titleId} onCancel={() => setOpen(false)} onClose={() => setOpen(false)} onClick={(event) => { if (event.target === event.currentTarget) setOpen(false); }}>
-          <div className="website-preview-panel">
+          <motion.div className="website-preview-panel" initial={reduced ? false : { opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}>
             <header className="website-preview-header">
               <h2 id={titleId}>{project.title}</h2>
               <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">Open site <ArrowUpRight size={16} aria-hidden /></a>
@@ -77,7 +81,7 @@ export function WebsitePreview({ project }: { project: Project }) {
               {(showScreenshot || frameState !== "loaded") && <div className="website-preview-fallback"><PreviewImage project={project} />{!showScreenshot && <div role="status">{frameState === "loading" ? "Loading website…" : "The embedded preview is unavailable."}{frameState === "unavailable" && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">Open the live site <ArrowUpRight size={15} aria-hidden /></a>}</div>}</div>}
               {frameState !== "unavailable" && <iframe className={frameState === "loaded" && !showScreenshot ? "is-loaded" : ""} src={project.liveUrl} title={`${project.title} live website`} referrerPolicy="strict-origin-when-cross-origin" onLoad={() => setFrameState("loaded")} onError={() => setFrameState("unavailable")} />}
             </div>
-          </div>
+          </motion.div>
         </dialog>
       )}
     </>

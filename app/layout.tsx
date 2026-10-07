@@ -88,9 +88,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <a className="skip-link" href="#main-content">
             Skip to content
           </a>
-          <ScrollEffects />
           <Header />
-          <main id="main-content">{children}</main>
+          <ScrollEffects>{children}</ScrollEffects>
           <Footer />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
         </body>
